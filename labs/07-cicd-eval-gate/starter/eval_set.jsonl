@@ -1,0 +1,6 @@
+{"query": "How many weeks of paid parental leave does the primary caregiver get?", "context": "Contoso provides 20 weeks of fully paid parental leave to the primary caregiver and 8 weeks to the secondary caregiver.", "must_contain": "20"}
+{"query": "What is the hotel cap in tier-1 cities?", "context": "Hotel spend is capped at USD 250 per night in tier-1 cities (New York, London, Tokyo, Sydney) and USD 180 elsewhere.", "must_contain": "250"}
+{"query": "Within how many days must expense claims be submitted?", "context": "Expense claims must be submitted within 30 days with itemized receipts for any item above USD 25.", "must_contain": "30"}
+{"query": "How often are laptops refreshed?", "context": "Laptops are refreshed every 3 years. Engineers may request a refresh after 2 years if build times exceed 10 minutes.", "must_contain": "3"}
+{"query": "How many days per week can I work remotely?", "context": "Employees may work remotely up to 3 days per week with manager approval.", "must_contain": "3"}
+{"query": "How quickly must phishing be reported?", "context": "Report suspected phishing to security@contoso.example within 1 hour.", "must_contain": "1 hour"}

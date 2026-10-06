@@ -1,0 +1,3 @@
+{"source": "Your request has been escalated to Tier 3.", "preferred": "I've passed this to our senior engineers, and they'll dig in right away.", "rejected": "Your request has been escalated to Tier 3 for remediation per SLA."}
+{"source": "Remediation will be effectuated within 4 hours.", "preferred": "We'll have this fixed within 4 hours.", "rejected": "Remediation activities will be effectuated in accordance with SLA timelines."}
+{"source": "Please provide the requisite documentation.", "preferred": "Could you send us a copy of the receipt?", "rejected": "Provide requisite documentation to continue processing."}

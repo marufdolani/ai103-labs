@@ -1,0 +1,43 @@
+# Lab 07: evaluation quality gate for a Foundry app.
+# Manual trigger by default. Uncomment pull_request to block merges that regress quality.
+name: ai103-eval-gate
+
+on:
+  workflow_dispatch:
+  # pull_request:
+  #   paths:
+  #     - "labs/07-cicd-eval-gate/solution/prompt_good.txt"
+
+permissions:
+  id-token: write   # OIDC federation: no client secret stored in GitHub
+  contents: read
+
+jobs:
+  eval-gate:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      PROJECT_ENDPOINT: ${{ vars.PROJECT_ENDPOINT }}
+      FOUNDRY_ENDPOINT: ${{ vars.FOUNDRY_ENDPOINT }}
+      FOUNDRY_OPENAI_ENDPOINT: ${{ vars.FOUNDRY_OPENAI_ENDPOINT }}
+      CHAT_MODEL: ${{ vars.CHAT_MODEL }}
+      LARGE_MODEL: ${{ vars.LARGE_MODEL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (workload identity federation)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Evaluation gate
+        run: python labs/07-cicd-eval-gate/solution/lab.py --gate

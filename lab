@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Convenience wrapper: ./lab <command> [lab] [--solution]   (Windows: python -m labkit ...)
+cd "$(dirname "$0")"
+if [ -d .venv ]; then . .venv/bin/activate; fi
+exec python -m labkit "$@"

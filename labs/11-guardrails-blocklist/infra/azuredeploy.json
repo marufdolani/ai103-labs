@@ -1,0 +1,141 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "15187089421260362892"
+    }
+  },
+  "parameters": {
+    "foundryAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "FOUNDRY_ACCOUNT_NAME from .env"
+      }
+    },
+    "chatModel": {
+      "type": "string",
+      "defaultValue": "gpt-5.4-mini"
+    },
+    "chatModelVersion": {
+      "type": "string",
+      "defaultValue": "2026-03-17"
+    }
+  },
+  "variables": {
+    "copy": [
+      {
+        "name": "promptHarmFilters",
+        "count": "[length(variables('harms'))]",
+        "input": {
+          "name": "[variables('harms')[copyIndex('promptHarmFilters')]]",
+          "enabled": true,
+          "blocking": true,
+          "severityThreshold": "Low",
+          "source": "Prompt"
+        }
+      },
+      {
+        "name": "completionHarmFilters",
+        "count": "[length(variables('harms'))]",
+        "input": {
+          "name": "[variables('harms')[copyIndex('completionHarmFilters')]]",
+          "enabled": true,
+          "blocking": true,
+          "severityThreshold": "Low",
+          "source": "Completion"
+        }
+      }
+    ],
+    "harms": [
+      "Hate",
+      "Sexual",
+      "Violence",
+      "Selfharm"
+    ]
+  },
+  "resources": [
+    {
+      "type": "Microsoft.CognitiveServices/accounts/raiBlocklists",
+      "apiVersion": "2025-06-01",
+      "name": "[format('{0}/{1}', parameters('foundryAccountName'), 'competitors')]",
+      "properties": {
+        "description": "Competitor brand names marketing must never mention"
+      }
+    },
+    {
+      "copy": {
+        "name": "items",
+        "count": "[length(createArray('Fabrikam', 'Northwind Traders'))]"
+      },
+      "type": "Microsoft.CognitiveServices/accounts/raiBlocklists/raiBlocklistItems",
+      "apiVersion": "2025-06-01",
+      "name": "[format('{0}/{1}/{2}', parameters('foundryAccountName'), 'competitors', format('item{0}', copyIndex()))]",
+      "properties": {
+        "pattern": "[createArray('Fabrikam', 'Northwind Traders')[copyIndex()]]",
+        "isRegex": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts/raiBlocklists', parameters('foundryAccountName'), 'competitors')]"
+      ]
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts/raiPolicies",
+      "apiVersion": "2025-06-01",
+      "name": "[format('{0}/{1}', parameters('foundryAccountName'), 'strict-guardrail')]",
+      "properties": {
+        "basePolicyName": "Microsoft.DefaultV2",
+        "mode": "Blocking",
+        "contentFilters": "[concat(variables('promptHarmFilters'), variables('completionHarmFilters'), createArray(createObject('name', 'Jailbreak', 'enabled', true(), 'blocking', true(), 'source', 'Prompt'), createObject('name', 'Indirect Attack', 'enabled', true(), 'blocking', true(), 'source', 'Prompt'), createObject('name', 'Protected Material Text', 'enabled', true(), 'blocking', true(), 'source', 'Completion'), createObject('name', 'Protected Material Code', 'enabled', true(), 'blocking', false(), 'source', 'Completion')))]",
+        "customBlocklists": [
+          {
+            "blocklistName": "competitors",
+            "blocking": true,
+            "source": "Prompt"
+          },
+          {
+            "blocklistName": "competitors",
+            "blocking": true,
+            "source": "Completion"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts/raiBlocklists', parameters('foundryAccountName'), 'competitors')]",
+        "items"
+      ]
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "apiVersion": "2025-06-01",
+      "name": "[format('{0}/{1}', parameters('foundryAccountName'), 'guarded-chat')]",
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 20
+      },
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "[parameters('chatModel')]",
+          "version": "[parameters('chatModelVersion')]"
+        },
+        "raiPolicyName": "strict-guardrail"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts/raiPolicies', parameters('foundryAccountName'), 'strict-guardrail')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "GUARDED_MODEL": {
+      "type": "string",
+      "value": "guarded-chat"
+    },
+    "GUARDRAIL_POLICY": {
+      "type": "string",
+      "value": "strict-guardrail"
+    }
+  }
+}

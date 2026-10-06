@@ -1,0 +1,12 @@
+{"source": "Per our SLA, remediation of the P2 incident will be effectuated within 4 business hours.", "target": "We'll have this fixed within 4 business hours. Thanks for your patience!"}
+{"source": "Your request has been escalated to Tier 3 for further investigation.", "target": "I've passed this to our senior engineers, and they'll dig in right away."}
+{"source": "Kindly be advised that the invoice discrepancy has been rectified.", "target": "Good news: we've fixed the invoice mistake."}
+{"source": "The feature you requested is not on the current roadmap.", "target": "That feature isn't planned yet, but I've shared your idea with the product team."}
+{"source": "Authentication failure due to expired credentials. Re-authenticate.", "target": "Your password has expired. Reset it here and you'll be back in."}
+{"source": "We are unable to process refunds outside the 30-day window.", "target": "Refunds are available for 30 days after purchase, so this one falls outside the window. Here's what I can offer instead."}
+{"source": "Service degradation was observed in the West Europe region.", "target": "Some customers in Europe saw slowdowns. It's resolved now, and we're sorry for the trouble."}
+{"source": "Please provide the requisite documentation to proceed.", "target": "Could you send us a copy of the receipt? Then we can move ahead."}
+{"source": "Your ticket has been closed due to inactivity.", "target": "We closed this ticket since we hadn't heard back. Just reply if you still need help!"}
+{"source": "A configuration change will be deployed during the maintenance window.", "target": "We're making an update on Sunday night, and you shouldn't notice any downtime."}
+{"source": "Data export functionality is restricted to administrator roles.", "target": "Only admins can export data. Ask your admin, or I can tell you who that is."}
+{"source": "Your subscription will auto-renew on the stipulated date.", "target": "Your plan renews automatically on 1 November. No action needed."}

@@ -1,0 +1,20 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "wttr.in weather", "version": "1.0.0", "description": "Current weather for a city" },
+  "servers": [ { "url": "https://wttr.in" } ],
+  "paths": {
+    "/{location}": {
+      "get": {
+        "operationId": "GetCurrentWeather",
+        "summary": "Get current weather for a location",
+        "parameters": [
+          { "name": "location", "in": "path", "required": true, "schema": { "type": "string" }, "description": "City name, e.g. Sydney" },
+          { "name": "format", "in": "query", "required": true, "schema": { "type": "string", "default": "j1" }, "description": "Always use j1 (JSON)" }
+        ],
+        "responses": {
+          "200": { "description": "Weather report", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      }
+    }
+  }
+}

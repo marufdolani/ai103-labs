@@ -1,0 +1,269 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "5376636118169835546"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "principalId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Object ID of the learner (gets Foundry User on the isolated resource so you can prove the network blocks you, not RBAC)."
+      }
+    }
+  },
+  "variables": {
+    "token": "[substring(uniqueString(resourceGroup().id, 'lab08'), 0, 6)]",
+    "isoName": "[format('aif-iso-{0}', variables('token'))]",
+    "storageName": "[format('stiso{0}{1}', variables('token'), substring(uniqueString(resourceGroup().id), 0, 6))]",
+    "aiZones": [
+      "privatelink.cognitiveservices.azure.com",
+      "privatelink.openai.azure.com",
+      "privatelink.services.ai.azure.com"
+    ]
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2024-05-01",
+      "name": "[format('vnet-ai103-{0}', variables('token'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.80.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "private-endpoints",
+            "properties": {
+              "addressPrefix": "10.80.1.0/24"
+            }
+          },
+          {
+            "name": "apps",
+            "properties": {
+              "addressPrefix": "10.80.2.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2025-06-01",
+      "name": "[variables('isoName')]",
+      "location": "[parameters('location')]",
+      "kind": "AIServices",
+      "sku": {
+        "name": "S0"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "customSubDomainName": "[variables('isoName')]",
+        "allowProjectManagement": true,
+        "publicNetworkAccess": "Disabled",
+        "networkAcls": {
+          "defaultAction": "Deny"
+        },
+        "disableLocalAuth": true
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('storageName')]",
+      "location": "[parameters('location')]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {
+        "publicNetworkAccess": "Disabled",
+        "allowSharedKeyAccess": false,
+        "allowBlobPublicAccess": false,
+        "minimumTlsVersion": "TLS1_2",
+        "networkAcls": {
+          "defaultAction": "Deny",
+          "bypass": "AzureServices"
+        }
+      }
+    },
+    {
+      "copy": {
+        "name": "zones",
+        "count": "[length(concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage))))]"
+      },
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2024-06-01",
+      "name": "[concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[copyIndex()]]",
+      "location": "global"
+    },
+    {
+      "copy": {
+        "name": "links",
+        "count": "[length(concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage))))]"
+      },
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "2024-06-01",
+      "name": "[format('{0}/{1}', concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[copyIndex()], format('link-{0}', format('vnet-ai103-{0}', variables('token'))))]",
+      "location": "global",
+      "properties": {
+        "virtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token')))]"
+        },
+        "registrationEnabled": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token')))]",
+        "[resourceId('Microsoft.Network/privateDnsZones', concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[copyIndex()])]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2024-05-01",
+      "name": "[format('pe-{0}', variables('isoName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "subnet": {
+          "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token'))), '2024-05-01').subnets[0].id]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "foundry",
+            "properties": {
+              "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', variables('isoName'))]",
+              "groupIds": [
+                "account"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('isoName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2024-05-01",
+      "name": "[format('{0}/{1}', format('pe-{0}', variables('isoName')), 'default')]",
+      "properties": {
+        "copy": [
+          {
+            "name": "privateDnsZoneConfigs",
+            "count": "[length(variables('aiZones'))]",
+            "input": {
+              "name": "[replace(variables('aiZones')[copyIndex('privateDnsZoneConfigs')], '.', '-')]",
+              "properties": {
+                "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[copyIndex('privateDnsZoneConfigs')])]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateEndpoints', format('pe-{0}', variables('isoName')))]",
+        "zones"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2024-05-01",
+      "name": "[format('pe-{0}-blob', variables('storageName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "subnet": {
+          "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token'))), '2024-05-01').subnets[0].id]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "blob",
+            "properties": {
+              "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+              "groupIds": [
+                "blob"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2024-05-01",
+      "name": "[format('{0}/{1}', format('pe-{0}-blob', variables('storageName')), 'default')]",
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "blob",
+            "properties": {
+              "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[3])]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateEndpoints', format('pe-{0}-blob', variables('storageName')))]",
+        "[resourceId('Microsoft.Network/privateDnsZones', concat(variables('aiZones'), createArray(format('privatelink.blob.{0}', environment().suffixes.storage)))[3])]"
+      ]
+    },
+    {
+      "condition": "[not(empty(parameters('principalId')))]",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[resourceId('Microsoft.CognitiveServices/accounts', variables('isoName'))]",
+      "name": "[guid(resourceId('Microsoft.CognitiveServices/accounts', variables('isoName')), parameters('principalId'), '53ca6127-db72-4b80-b1b0-d745d6d5456d')]",
+      "properties": {
+        "principalId": "[parameters('principalId')]",
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '53ca6127-db72-4b80-b1b0-d745d6d5456d')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('isoName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "ISOLATED_FOUNDRY_NAME": {
+      "type": "string",
+      "value": "[variables('isoName')]"
+    },
+    "ISOLATED_FOUNDRY_ID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.CognitiveServices/accounts', variables('isoName'))]"
+    },
+    "ISOLATED_FOUNDRY_ENDPOINT": {
+      "type": "string",
+      "value": "[format('https://{0}.cognitiveservices.azure.com/', variables('isoName'))]"
+    },
+    "ISOLATED_STORAGE_ID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+    },
+    "ISOLATED_PE_ID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/privateEndpoints', format('pe-{0}', variables('isoName')))]"
+    },
+    "ISOLATED_VNET_ID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', format('vnet-ai103-{0}', variables('token')))]"
+    }
+  }
+}

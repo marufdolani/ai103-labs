@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": { "value": "${AZURE_ENV_NAME}" },
+    "location": { "value": "${AZURE_LOCATION=eastus2}" },
+    "principalId": { "value": "${AZURE_PRINCIPAL_ID}" },
+    "principalType": { "value": "${AZURE_PRINCIPAL_TYPE=User}" },
+    "deployModelRouter": { "value": "${DEPLOY_MODEL_ROUTER=true}" },
+    "deployImageModel": { "value": "${DEPLOY_IMAGE_MODEL=false}" },
+    "deployVideoModel": { "value": "${DEPLOY_VIDEO_MODEL=false}" },
+    "deployAudioModels": { "value": "${DEPLOY_AUDIO_MODELS=false}" },
+    "deployLegacyChat": { "value": "${DEPLOY_LEGACY_CHAT=false}" }
+  }
+}

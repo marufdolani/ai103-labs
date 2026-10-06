@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "1919958088832811812"
+    }
+  },
+  "parameters": {
+    "amount": {
+      "type": "int",
+      "defaultValue": 50
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string",
+      "defaultValue": "[utcNow('yyyy-MM-01')]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Consumption/budgets",
+      "apiVersion": "2023-11-01",
+      "name": "ai103-labs-monthly",
+      "properties": {
+        "category": "Cost",
+        "amount": "[parameters('amount')]",
+        "timeGrain": "Monthly",
+        "timePeriod": {
+          "startDate": "[parameters('startDate')]"
+        },
+        "notifications": {
+          "actual80": {
+            "enabled": true,
+            "operator": "GreaterThan",
+            "threshold": 80,
+            "thresholdType": "Actual",
+            "contactEmails": [
+              "[parameters('contactEmail')]"
+            ]
+          },
+          "forecast100": {
+            "enabled": true,
+            "operator": "GreaterThan",
+            "threshold": 100,
+            "thresholdType": "Forecasted",
+            "contactEmails": [
+              "[parameters('contactEmail')]"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

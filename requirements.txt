@@ -1,0 +1,27 @@
+# Python 3.11-3.12 recommended (the red-team extra does not build on 3.13 yet).
+azure-identity>=1.25.0
+azure-ai-projects>=2.8.0
+openai>=2.8.0
+azure-search-documents>=11.6.0
+azure-storage-blob>=12.26.0
+azure-ai-evaluation>=1.13.0
+azure-ai-textanalytics==5.3.0
+azure-ai-translation-text>=2.0.0
+azure-ai-translation-document>=2.0.0
+azure-ai-documentintelligence>=1.0.2
+azure-cognitiveservices-speech>=1.45.0
+azure-monitor-opentelemetry>=1.6.0
+azure-monitor-query>=1.4.0
+opentelemetry-instrumentation-openai-v2>=2.1b0
+agent-framework-core>=1.0.0
+agent-framework-foundry>=1.0.0
+agent-framework-orchestrations>=1.0.0
+agent-framework-a2a>=1.0.0b0
+a2a-sdk[http-server]>=1.0.0
+uvicorn>=0.30.0
+requests>=2.32.0
+python-dotenv>=1.0.0
+pydantic>=2.7.0
+pillow>=10.4.0
+pytest>=8.2.0
+pyyaml>=6.0

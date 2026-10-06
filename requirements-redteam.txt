@@ -1,0 +1,3 @@
+# Extra for lab 15 (AI Red Teaming Agent). Use Python 3.11 or 3.12.
+-r requirements.txt
+azure-ai-evaluation[redteam]>=1.13.0
