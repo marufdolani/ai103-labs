@@ -174,7 +174,23 @@ Labs 06, 08, 10 and 11 have their own **Deploy to Azure** buttons for the extra 
 
 ## Cost
 
-Rough idle cost of the shared platform is a few US dollars per day, mostly **Azure AI Search Basic** (~USD 75/month). Models are pay-per-token. Extra-infrastructure labs (API Management, private endpoints) cost more while deployed, so delete them after the lab. Tear everything down with:
+Estimates only (verify in the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)); not measured spend.
+
+| Scenario | Estimated total |
+|---|---|
+| All 50 labs, torn down within 3-4 days | **USD 25-45** |
+| Platform left up for two weeks | **USD 80-130** |
+
+| Driver | Estimate |
+|---|---|
+| Idle platform (Search Basic ~USD 75/month, plus Log Analytics, App Insights, Storage) | ~USD 2.5-3.5/day |
+| API Management (lab 06) | ~USD 0.20/hour while deployed |
+| Private endpoints and VNet (lab 08) | ~USD 0.50-1/day |
+| Model tokens (chat, embeddings, evaluators, red teaming) | ~USD 8-15 in total |
+| Optional Sora and image models | USD 5-20, depending on clips rendered |
+| Content Understanding, Document Intelligence, Translator, Speech, Language | cents per lab |
+
+Run `./lab clean N` after each lab, delete the lab 06 and 08 extras straight after those labs, and set the lab 10 budget alert. Tear everything down with:
 ```bash
 azd down --purge
 ```
