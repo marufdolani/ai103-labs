@@ -1,0 +1,843 @@
+<!doctype html><html data-theme="light"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AI-103 Fast Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: field-manual briefing — header with exam weights to scale, sticky tab rail, one working surface per tab */
+:root{
+  --paper:#F2F4F6; --card:#FFFFFF; --ink:#132030; --muted:#566476; --line:#D3DAE2; --soft:#E7ECF1;
+  --signal:#C98A0B; --signal-bg:#FBF1DA;
+  --ok:#1E7F48; --ok-bg:#E3F3EA; --bad:#B63C28; --bad-bg:#F8E5E1;
+  --d1:#3B5A96; --d2:#0D7672; --d3:#93407A; --d4:#9C6410; --d5:#4A7629;
+  --code-bg:#14202E; --code-fg:#E2E9F0;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E141B; --card:#16202B; --ink:#E4EAF0; --muted:#94A3B4; --line:#283546; --soft:#1C2835;
+  --signal:#F0B43C; --signal-bg:#33280F;
+  --ok:#5CC98A; --ok-bg:#12301F; --bad:#F08A76; --bad-bg:#3A1A14;
+  --d1:#86A4E0; --d2:#4FC3BD; --d3:#D88AC0; --d4:#E0A753; --d5:#93C46A;
+  --code-bg:#0A1016; --code-fg:#D8E1EA; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E141B; --card:#16202B; --ink:#E4EAF0; --muted:#94A3B4; --line:#283546; --soft:#1C2835;
+  --signal:#F0B43C; --signal-bg:#33280F;
+  --ok:#5CC98A; --ok-bg:#12301F; --bad:#F08A76; --bad-bg:#3A1A14;
+  --d1:#86A4E0; --d2:#4FC3BD; --d3:#D88AC0; --d4:#E0A753; --d5:#93C46A;
+  --code-bg:#0A1016; --code-fg:#D8E1EA; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+a{color:var(--d1)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);line-height:1}
+h2{font-size:1.75rem;line-height:1.1}
+h3{font-size:1.25rem;line-height:1.15}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.lede{max-width:66ch;color:var(--muted);margin:.6rem 0 0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* header */
+header.brief{display:grid;gap:18px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.brief-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:end}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:500}
+.weights{display:grid;gap:8px}
+.wbar{display:flex;height:34px;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.wbar span{display:flex;align-items:center;padding-inline:8px;color:#fff;font-family:var(--f-display);font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;min-width:0}
+:root[data-theme="dark"] .wbar span{color:#0E141B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wbar span{color:#0E141B}}
+.wlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem}
+.wlegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;gap:4px;overflow-x:auto;padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:24px;scrollbar-width:thin}
+nav.tabs button{flex:0 0 auto;border:1px solid transparent;background:none;padding:7px 14px;border-radius:4px;cursor:pointer;font-family:var(--f-display);font-size:1.05rem;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+nav.tabs button:hover{color:var(--ink);background:var(--soft)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink);background:var(--card)}
+section.panel{display:grid;gap:22px}
+.panel-head{display:grid;gap:6px}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.7rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.c-d1{color:var(--d1)}.c-d2{color:var(--d2)}.c-d3{color:var(--d3)}.c-d4{color:var(--d4)}.c-d5{color:var(--d5)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filter{border:1px solid var(--line);background:var(--card);padding:5px 11px;border-radius:999px;cursor:pointer;font-size:.85rem}
+.filter[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+input[type="search"]{flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:4px;font:inherit}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;cursor:pointer;user-select:none}
+
+/* plan */
+.method{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.method div{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.method b{font-family:var(--f-display);font-size:1.1rem;display:block;margin-bottom:2px}
+.method p{margin:0;color:var(--muted);font-size:.9rem}
+.day{display:grid;gap:10px}
+.day-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.day-head .eyebrow{color:var(--signal)}
+.block{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.block input{width:18px;height:18px;margin-top:3px;accent-color:var(--ok);cursor:pointer}
+.block .time{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.block .body{min-width:0;display:grid;gap:6px}
+.block.done{opacity:.6}
+.block.done h3{text-decoration:line-through}
+.block ul{margin:0;padding-left:18px}
+.block li{margin:2px 0}
+.block .goal{font-size:.88rem;background:var(--signal-bg);border-left:3px solid var(--signal);padding:6px 10px;border-radius:0 4px 4px 0}
+.progress{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.meter{height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+
+/* reflex */
+.reflex{display:grid;gap:8px}
+.rx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:6px 18px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--dc,var(--line));border-radius:4px;padding:12px 14px}
+.rx .q{font-weight:500}
+.rx .q::before{content:"IF  ";font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+.rx .a{font-weight:600}
+.rx .a::before{content:"→  ";color:var(--signal)}
+.rx .why{grid-column:2;font-size:.86rem;color:var(--muted)}
+.rx.hide .a,.rx.hide .why{filter:blur(6px);cursor:pointer;user-select:none}
+.rx.hide .a::after{content:""}
+.count{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+@media (max-width:680px){.rx{grid-template-columns:1fr}.rx .why{grid-column:1}}
+
+/* quiz */
+.quiz-shell{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px;align-items:start}
+@media (max-width:820px){.quiz-shell{grid-template-columns:1fr}}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px;display:grid;gap:14px;min-width:0}
+.qmeta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.qtext{font-size:1.04rem;max-width:70ch}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:5px;padding:10px 12px;cursor:pointer;line-height:1.45}
+.opt:hover:not([disabled]){border-color:var(--ink)}
+.opt .k{font-family:var(--f-mono);font-weight:500;color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt[disabled]{cursor:default}
+.explain{border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:8px;font-size:.93rem}
+.verdict{font-family:var(--f-display);font-size:1.2rem;font-weight:700}
+.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}
+.trap{background:var(--signal-bg);border-left:3px solid var(--signal);padding:6px 10px;border-radius:0 4px 4px 0}
+.qnav{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:500}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn[disabled]{opacity:.4;cursor:default}
+.score{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:12px}
+.big{font-family:var(--f-display);font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.drow{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:.84rem;font-variant-numeric:tabular-nums}
+.drow .meter{grid-column:1/-1}
+.pass{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+
+/* code */
+.codes{display:grid;gap:16px}
+.code{background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
+.code-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px 16px}
+.code-head p{margin:2px 0 0;color:var(--muted);font-size:.88rem}
+.code pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;overflow-x:auto;font-family:var(--f-mono);font-size:.8rem;line-height:1.55}
+.copy{border:1px solid var(--line);background:var(--paper);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:.8rem}
+.memo{padding:10px 16px;font-size:.86rem;border-top:1px solid var(--line)}
+
+/* traps */
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.tp{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.tp .no{font-family:var(--f-mono);font-size:.75rem;color:var(--bad);text-decoration:line-through}
+.tp .yes{font-weight:600}
+.tp p{margin:0;font-size:.88rem;color:var(--muted)}
+table.rename{width:100%;border-collapse:collapse;font-size:.9rem}
+table.rename th,table.rename td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.rename th{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:6px}
+.tactics{display:grid;gap:10px;counter-reset:t;max-width:78ch}
+.tactics li{list-style:none;padding-left:36px;position:relative}
+.tactics li::before{counter-increment:t;content:counter(t);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--f-mono);font-size:.75rem;display:grid;place-items:center}
+.tactics{padding:0;margin:0}
+.src{font-size:.82rem;color:var(--muted)}
+.src a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="brief">
+  <div class="brief-top">
+    <div>
+      <div class="eyebrow">Exam AI-103 · Developing AI Apps and Agents on Azure</div>
+      <h1>AI-103 Fast Track</h1>
+      <p class="lede">A 48-hour, scenario-first path to the Azure AI Apps and Agents Developer Associate. Learn the decision reflexes the exam tests, drill them on scenarios, then close gaps with Microsoft Learn and the course playlist.</p>
+    </div>
+    <div class="facts">
+      <span><b>120</b> min</span><span><b>40–60</b> questions</span><span>pass <b>700</b>/1000</span><span>skills as of <b>16 Apr 2026</b></span>
+    </div>
+  </div>
+  <div class="weights">
+    <div class="wbar" id="wbar" aria-label="Exam domain weights to scale"></div>
+    <div class="wlegend" id="wlegend"></div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button role="tab" id="t-plan" aria-selected="true" data-tab="plan">48h Plan</button>
+  <button role="tab" id="t-reflex" aria-selected="false" data-tab="reflex">Reflex Map</button>
+  <button role="tab" id="t-drill" aria-selected="false" data-tab="drill">Scenario Drills</button>
+  <button role="tab" id="t-code" aria-selected="false" data-tab="code">Code Patterns</button>
+  <button role="tab" id="t-traps" aria-selected="false" data-tab="traps">Traps &amp; Exam Day</button>
+</nav>
+
+<!-- PLAN -->
+<section class="panel" id="p-plan" role="tabpanel" aria-labelledby="t-plan">
+  <div class="panel-head">
+    <h2>The method: reflex first, reading second</h2>
+    <p class="lede">AI-103 questions are short scenarios with one decisive phrase ("no keys", "data must stay in the EU", "who executes the function"). The fastest route is to learn those trigger-to-answer pairs, test yourself until they're automatic, and read Microsoft Learn only where you miss.</p>
+  </div>
+  <div class="method">
+    <div><b>1 · Prime</b><p>Skim the Reflex Map for a domain in drill mode. Guess before revealing.</p></div>
+    <div><b>2 · Watch &amp; read</b><p>Playlist at 1.5–2× plus the listed Learn modules. Read the units on rows you missed.</p></div>
+    <div><b>3 · Drill</b><p>Run that domain's scenarios. Each miss gets added to your "missed" set automatically.</p></div>
+    <div><b>4 · Close the gap</b><p>Retry missed only, then re-read the matching traps. Repeat until clean.</p></div>
+  </div>
+  <div class="progress" id="planProgress"></div>
+  <div class="meter"><i id="planMeter"></i></div>
+  <div id="planDays" style="display:grid;gap:28px"></div>
+  <p class="src">The <a href="https://www.youtube.com/playlist?list=PLWGIg_TYLeEQ" target="_blank" rel="noopener">AI-103 playlist</a> (26 videos, Microsoft Learn) follows the official course's four learning paths in order. Watch the stretch matching each block. Hands-on labs: <a href="https://microsoftlearning.github.io/mslearn-ai-studio/" target="_blank" rel="noopener">generative AI</a>, <a href="https://microsoftlearning.github.io/mslearn-ai-agents/" target="_blank" rel="noopener">agents</a>, <a href="https://microsoftlearning.github.io/mslearn-ai-language/" target="_blank" rel="noopener">language</a>, <a href="https://microsoftlearning.github.io/mslearn-ai-vision/" target="_blank" rel="noopener">vision</a>, <a href="https://microsoftlearning.github.io/mslearn-ai-information-extraction/" target="_blank" rel="noopener">information extraction</a>.</p>
+</section>
+
+<!-- REFLEX -->
+<section class="panel" id="p-reflex" role="tabpanel" aria-labelledby="t-reflex" hidden>
+  <div class="panel-head">
+    <h2>Reflex Map</h2>
+    <p class="lede">Scenario trigger on the left, the answer Microsoft expects on the right. Turn on drill mode to blur answers, then click a row to check yourself.</p>
+  </div>
+  <div class="toolbar">
+    <input type="search" id="rxSearch" placeholder="Search triggers or answers, e.g. 429, PII, hybrid" aria-label="Search the reflex map">
+    <label class="toggle" for="rxDrill"><input type="checkbox" id="rxDrill"> Drill mode</label>
+  </div>
+  <div class="toolbar" id="rxFilters"></div>
+  <div class="count" id="rxCount"></div>
+  <div class="reflex" id="rxList"></div>
+</section>
+
+<!-- DRILL -->
+<section class="panel" id="p-drill" role="tabpanel" aria-labelledby="t-drill" hidden>
+  <div class="panel-head">
+    <h2>Scenario Drills</h2>
+    <p class="lede">Exam-style scenarios with the reasoning and the distractor to watch for. Aim for 80%+ per domain before exam day; the pass mark of 700 is a scaled score, so treat 80% here as your safety margin.</p>
+  </div>
+  <div class="toolbar" id="qFilters"></div>
+  <div class="quiz-shell">
+    <div class="qcard" id="qCard"></div>
+    <aside class="score" id="qScore"></aside>
+  </div>
+</section>
+
+<!-- CODE -->
+<section class="panel" id="p-code" role="tabpanel" aria-labelledby="t-code" hidden>
+  <div class="panel-head">
+    <h2>Code patterns to recognise</h2>
+    <p class="lede">The exam expects Python familiarity and may ask you to complete or fix a snippet. Know the shape of each call and which object owns it; you won't need to memorise every argument.</p>
+  </div>
+  <div class="codes" id="codeList"></div>
+</section>
+
+<!-- TRAPS -->
+<section class="panel" id="p-traps" role="tabpanel" aria-labelledby="t-traps" hidden>
+  <div class="panel-head">
+    <h2>Distractors Microsoft likes</h2>
+    <p class="lede">Each card is a wrong answer that looks right, and the answer that beats it.</p>
+  </div>
+  <div class="traps" id="trapList"></div>
+  <div class="panel-head"><h2>Renamed and retired: answer with the current name</h2></div>
+  <div class="tbl"><table class="rename"><thead><tr><th>You may remember</th><th>Current name / replacement</th></tr></thead><tbody id="renameRows"></tbody></table></div>
+  <div class="panel-head"><h2>Exam-day tactics</h2></div>
+  <ol class="tactics" id="tactics"></ol>
+  <p class="src">Sources: <a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ai-103" target="_blank" rel="noopener">AI-103 study guide</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/guardrails/guardrails-overview" target="_blank" rel="noopener">Foundry guardrails</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry" target="_blank" rel="noopener">Foundry RBAC</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/built-in-evaluators" target="_blank" rel="noopener">Built-in evaluators</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/runtime-components" target="_blank" rel="noopener">Agents, conversations, responses</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-foundry-iq" target="_blank" rel="noopener">Foundry IQ</a> · <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview" target="_blank" rel="noopener">Content Understanding</a>. Preview features can appear on the exam when commonly used; service names were checked against Learn in October 2026.</p>
+</section>
+</div>
+
+<script>
+const D = {
+  d1:{name:"Plan & manage", w:27.5, range:"25–30%"},
+  d2:{name:"Generative AI & agents", w:32.5, range:"30–35%"},
+  d3:{name:"Computer vision", w:12.5, range:"10–15%"},
+  d4:{name:"Text analysis", w:12.5, range:"10–15%"},
+  d5:{name:"Information extraction", w:12.5, range:"10–15%"}
+};
+const L = "https://learn.microsoft.com/en-us/training/modules/";
+const store = {
+  get(k,f){try{const v=localStorage.getItem("ai103."+k);return v?JSON.parse(v):f}catch(e){return f}},
+  set(k,v){try{localStorage.setItem("ai103."+k,JSON.stringify(v))}catch(e){}}
+};
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const chip = d => `<span class="chip c-${d}">${D[d].name}</span>`;
+
+/* header weights */
+(function(){
+  const total = Object.values(D).reduce((a,b)=>a+b.w,0);
+  document.getElementById("wbar").innerHTML = Object.entries(D).map(([k,v])=>`<span style="flex:${v.w/total};background:var(--${k})" title="${v.name} ${v.range}">${v.range}</span>`).join("");
+  document.getElementById("wlegend").innerHTML = Object.entries(D).map(([k,v])=>`<span><i style="background:var(--${k})"></i>${v.name}</span>`).join("");
+})();
+
+/* tabs */
+const tabs=[...document.querySelectorAll("nav.tabs button")];
+function show(id){
+  tabs.forEach(b=>{const on=b.dataset.tab===id;b.setAttribute("aria-selected",on);document.getElementById("p-"+b.dataset.tab).hidden=!on});
+  store.set("tab",id);
+}
+tabs.forEach(b=>b.addEventListener("click",()=>show(b.dataset.tab)));
+const hashTab = location.hash.replace("#","");
+show(["plan","reflex","drill","code","traps"].includes(hashTab)?hashTab:store.get("tab","plan"));
+
+/* ---------------- PLAN ---------------- */
+const PLAN = [
+ {day:"Day 1", title:"The 60%: generative AI, agents, plan & manage", blocks:[
+  {id:"b1",time:"08:00–08:40",title:"Baseline drill",d:["d1","d2"],
+   items:["Scenario Drills → All domains. Answer 15 questions cold, no notes.","Note the two domains where you missed most; weight your day toward them."],
+   goal:"Know your weak spots before you read anything."},
+  {id:"b2",time:"08:45–10:45",title:"Generative apps in Foundry",d:["d2"],
+   items:[`Learn path: <a href="https://learn.microsoft.com/en-us/training/paths/develop-generative-ai-apps/" target="_blank" rel="noopener">Develop generative AI apps in Azure</a> (6 modules). Skim, stop at knowledge checks.`,
+    `Priority modules: <a href="${L}model-catalog-evaluate/" target="_blank" rel="noopener">Select, deploy, evaluate models</a>, <a href="${L}foundry-sdk/" target="_blank" rel="noopener">Chat app with the Responses API</a>, <a href="${L}use-generative-ai-tools/" target="_blank" rel="noopener">Apps that use tools</a>, <a href="${L}optimize-generative-ai-model-performance/" target="_blank" rel="noopener">Optimise performance</a>.`,
+    "Playlist: the opening videos (course intro + learning path 1) at 1.5×.",
+    "Reflex Map → Generative AI & agents rows on models, parameters, RAG and fine-tuning."],
+   goal:"Can explain prompt engineering vs RAG vs fine-tuning, and every model parameter, in one sentence each."},
+  {id:"b3",time:"11:00–13:00",title:"Agents: tools, knowledge, orchestration",d:["d2"],
+   items:[`Learn path: <a href="https://learn.microsoft.com/en-us/training/paths/develop-ai-agents-azure/" target="_blank" rel="noopener">Develop AI agents on Azure</a> (9 modules).`,
+    `Must-read: <a href="${L}build-agent-with-custom-tools/" target="_blank" rel="noopener">Custom tools</a>, <a href="${L}connect-agent-to-mcp-tools/" target="_blank" rel="noopener">MCP tools</a>, <a href="${L}introduction-foundry-iq/" target="_blank" rel="noopener">Foundry IQ</a>, <a href="${L}build-agent-workflows-microsoft-foundry/" target="_blank" rel="noopener">Agent workflows</a>, <a href="${L}orchestrate-semantic-kernel-multi-agent-solution/" target="_blank" rel="noopener">Multi-agent orchestration</a>, <a href="${L}discover-agents-with-a2a/" target="_blank" rel="noopener">A2A</a>.`,
+    "Playlist: learning path 2 videos (agents, MCP, multi-agent).",
+    "Code Patterns → agent, function calling, MCP approval."],
+   goal:"Pick the right tool (function, OpenAPI, MCP, file search, code interpreter, Foundry IQ) and the right orchestration pattern instantly."},
+  {id:"b4",time:"14:00–15:45",title:"Plan, secure, govern",d:["d1"],
+   items:["Deployment types, quotas and 429s, API Management AI gateway, model router.",
+    `Docs: <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry" target="_blank" rel="noopener">Foundry RBAC</a>, <a href="https://learn.microsoft.com/en-us/azure/foundry/guardrails/guardrails-overview" target="_blank" rel="noopener">Guardrails and intervention points</a>, <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/built-in-evaluators" target="_blank" rel="noopener">Built-in evaluators</a>.`,
+    `Module: <a href="${L}responsible-ai-studio/" target="_blank" rel="noopener">Responsible generative AI in Foundry</a> and <a href="${L}prepare-azure-ai-development/" target="_blank" rel="noopener">Plan and prepare</a>.`,
+    "Reflex Map → Plan & manage, all rows, drill mode on."],
+   goal:"Answer any 'least privilege / keyless / data residency / block this risk' question without hesitation."},
+  {id:"b5",time:"16:00–17:30",title:"One hands-on lab",d:["d2"],
+   items:[`Do one lab end to end: <a href="https://microsoftlearning.github.io/mslearn-ai-agents/" target="_blank" rel="noopener">agent with a custom tool or MCP server</a>. If you have no subscription handy, type out the Code Patterns snippets instead.`,
+    "Notice: project endpoint format, DefaultAzureCredential, conversations and agent_reference."],
+   goal:"Muscle memory for the SDK shapes that code questions test."},
+  {id:"b6",time:"19:00–20:30",title:"Evening drill",d:["d1","d2"],
+   items:["Scenario Drills → Plan & manage, then Generative AI & agents.","Retry missed until both are 80%+.","Read Traps cards 1–10."],
+   goal:"Close Day 1 above 80% on the two big domains."}
+ ]},
+ {day:"Day 2", title:"The 40%: vision, language, extraction, then a full mock", blocks:[
+  {id:"b7",time:"08:00–09:45",title:"Vision and information extraction",d:["d3","d5"],
+   items:[`Learn path: <a href="https://learn.microsoft.com/en-us/training/paths/insight-visual-data/" target="_blank" rel="noopener">Extract insights from visual data</a> (8 modules).`,
+    `Priority: <a href="${L}generate-images-azure-openai/" target="_blank" rel="noopener">Generate images</a>, <a href="${L}generate-video-with-foundry/" target="_blank" rel="noopener">Generate video (Sora 2)</a>, <a href="${L}analyze-content-ai/" target="_blank" rel="noopener">Content Understanding</a>, <a href="${L}extract-data-with-document-intelligence/" target="_blank" rel="noopener">Document Intelligence</a>, <a href="${L}ai-knowldge-mining/" target="_blank" rel="noopener">AI Search knowledge mining</a>.`,
+    "Playlist: learning path 4 videos."],
+   goal:"Content Understanding vs Document Intelligence vs AI Search skillsets: when each one wins."},
+  {id:"b8",time:"10:00–11:30",title:"Language, speech, translation",d:["d4"],
+   items:[`Learn path: <a href="https://learn.microsoft.com/en-us/training/paths/develop-language-solutions-azure-ai/" target="_blank" rel="noopener">Develop natural language solutions</a> (7 modules).`,
+    `Priority: <a href="${L}analyze-text-ai-language/" target="_blank" rel="noopener">Azure Language</a>, <a href="${L}create-speech-enabled-apps/" target="_blank" rel="noopener">Speech</a>, <a href="${L}develop-voice-live-agent/" target="_blank" rel="noopener">Voice Live</a>, <a href="${L}translate-text-speech/" target="_blank" rel="noopener">Translate text and speech</a>.`,
+    "Playlist: learning path 3 videos."],
+   goal:"Real-time vs fast vs batch transcription; phrase list vs Custom Speech; text vs document translation."},
+  {id:"b9",time:"11:30–12:30",title:"Reflex sweep",d:["d3","d4","d5"],
+   items:["Reflex Map in drill mode for Vision, Text, Extraction.","Scenario Drills for those three domains."],
+   goal:"80%+ on each small domain. They are 30–45% of the exam combined."},
+  {id:"b10",time:"13:30–15:30",title:"Full mock under time",d:["d1","d2","d3","d4","d5"],
+   items:["Reset drills, run All domains in one sitting. Budget 2 minutes per question.",
+    `Then take Microsoft's free Practice Assessment from the <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/AI-103" target="_blank" rel="noopener">AI-103 exam page</a> if it is offered.`],
+   goal:"Simulate pace and identify the last weak areas."},
+  {id:"b11",time:"15:45–17:30",title:"Fix the gaps",d:["d1","d2"],
+   items:["Retry missed only. For every miss, open the matching Learn unit and read that one unit.","All Traps cards plus the rename table."],
+   goal:"No repeated misses."},
+  {id:"b12",time:"Evening",title:"Light review and rest",d:["d1"],
+   items:["Exam-day tactics, the rename table, one last pass of Reflex Map in drill mode.","Stop by 21:00. Sleep beats one more hour of cramming."],
+   goal:"Arrive rested with the reflexes fresh."}
+ ]}
+];
+let planDone = store.get("plan",{});
+function renderPlan(){
+  const all = PLAN.flatMap(d=>d.blocks);
+  document.getElementById("planDays").innerHTML = PLAN.map(day=>`
+    <div class="day">
+      <div class="day-head"><span class="eyebrow">${day.day}</span><h2>${day.title}</h2></div>
+      ${day.blocks.map(b=>`
+      <div class="block ${planDone[b.id]?"done":""}">
+        <input type="checkbox" id="${b.id}" ${planDone[b.id]?"checked":""} aria-label="Mark ${esc(b.title)} done">
+        <div class="body">
+          <div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center"><span class="time">${b.time}</span>${b.d.map(chip).join("")}</div>
+          <h3><label for="${b.id}" style="cursor:pointer">${b.title}</label></h3>
+          <ul>${b.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+          <div class="goal"><b>Exit check:</b> ${b.goal}</div>
+        </div>
+      </div>`).join("")}
+    </div>`).join("");
+  const n = all.filter(b=>planDone[b.id]).length;
+  document.getElementById("planProgress").textContent = `${n} of ${all.length} blocks done`;
+  document.getElementById("planMeter").style.width = (n/all.length*100)+"%";
+  all.forEach(b=>document.getElementById(b.id).addEventListener("change",e=>{planDone[b.id]=e.target.checked;store.set("plan",planDone);renderPlan()}));
+}
+renderPlan();
+
+/* ---------------- REFLEX ---------------- */
+const RX = [
+ // d1
+ ["d1","Narrow task, huge volume, lowest cost and latency","Small language model (e.g. Phi-4-mini, a nano/mini GPT)","Small models win when the task is narrow. Reserve large models for open-ended reasoning."],
+ ["d1","Multistep reasoning, maths, planning, code analysis","Reasoning model (o-series or GPT-5 family) and tune reasoning_effort","Reasoning models trade latency/tokens for depth; temperature is not the control."],
+ ["d1","Send each prompt to the cheapest model able to handle it","Model router deployment","One deployment that picks an underlying model per prompt."],
+ ["d1","Predictable latency and throughput at steady high volume","Provisioned throughput (PTU) deployment","Reserved capacity. Standard is shared and can return 429 at peaks."],
+ ["d1","Highest default quota, data may be processed in any region","Global Standard deployment","Global routes to any region; data at rest stays in your geography."],
+ ["d1","Processing must stay in the EU or US, more quota than one region","Data Zone Standard (or Data Zone Provisioned)","Data zone keeps processing inside the EU/US zone."],
+ ["d1","Large offline job, results within 24 hours, cut cost","Global Batch deployment","About 50% cheaper than Global Standard, separate quota, async."],
+ ["d1","HTTP 429 Too Many Requests","Retry with exponential backoff honouring retry-after; raise TPM quota; spread load or move to PTU","Quota is TPM/RPM per deployment, per region, per subscription."],
+ ["d1","Per-app token limits and chargeback on shared deployments","Azure API Management AI gateway: token-limit and emit-token-metric policies","Also gives load balancing across backends and semantic caching."],
+ ["d1","No keys or secrets anywhere in the app","Managed identity + DefaultAzureCredential + Foundry User role; disable local (key) auth","Key Vault still means a key. Keyless means Entra ID tokens."],
+ ["d1","Developer builds agents and runs evals but must not deploy models","Foundry User (formerly Azure AI User)","Data actions in the project, no management actions."],
+ ["d1","Lead manages a project, publishes agents, adds devs","Foundry Project Manager","Can assign only the Foundry User role to others."],
+ ["d1","Admin creates Foundry resources and deploys models only","Foundry Account Owner","Management plane only, no project data actions."],
+ ["d1","Agent conversations, files and vectors must live in our own resources","Agent Service standard setup with your own Cosmos DB, Storage and AI Search","Basic setup uses Microsoft-managed storage."],
+ ["d1","No public internet path to Foundry or agents","Private endpoints, public network access disabled; Agent Service with your own VNet","Plus managed identity between services."],
+ ["d1","Provision and ship AI apps repeatably","Bicep/Terraform + azd + GitHub Actions/Azure DevOps (OIDC federated identity); evaluation as a release gate","Agents are versioned (create_version) so you can promote and roll back."],
+ ["d1","End-to-end traces of model and agent calls","Connect Application Insights to the project; OpenTelemetry tracing","Shows spans per tool call, tokens and latency."],
+ ["d1","Quality is drifting in production","Continuous evaluation on sampled traffic + Azure Monitor alerts","One-off evals don't catch drift."],
+ ["d1","Indexer skips documents or enrichment is wrong","Indexer execution history (errors/warnings) and Debug Sessions","Debug Sessions let you fix a skillset against a real document."],
+ ["d1","Block jailbreak attempts typed by users","Prompt Shields: user prompt attacks (guardrail on user input)","Direct attack = in the user's own prompt."],
+ ["d1","Malicious instructions hidden in emails, docs, web pages or tool output","Prompt Shields: indirect (document) attacks + spotlighting; agent guardrail at tool response","Indirect = the attack arrives through content the model reads."],
+ ["d1","Stop an agent sending PII into an external tool","Guardrail control at the tool call intervention point","Four intervention points: user input, tool call, tool response, output. Tool ones are agent-only (preview)."],
+ ["d1","Never mention specific words or competitor names","Custom blocklist on the guardrail/content filter","Severity thresholds don't target specific terms."],
+ ["d1","Model reproduces song lyrics or licensed code","Protected material detection (text and code)","Code detection also returns source citations."],
+ ["d1","Answer includes facts not in the source","Groundedness detection / Groundedness evaluator","Detects ungrounded claims against provided context."],
+ ["d1","Streaming feels slow because of filtering","Asynchronous filter mode","Content is filtered after it streams; accept that tradeoff consciously."],
+ ["d1","Automated adversarial testing before release","AI Red Teaming Agent (PyRIT-based)","Runs attack strategies and reports attack success rate."],
+ ["d1","A human must approve each sensitive tool call","MCP tool with require_approval=\"always\"; reply with mcp_approval_response","Human-in-the-loop also exists as a workflow step."],
+ ["d1","Limit which MCP tools an agent may call","allowed_tools on the MCP tool + least-privilege connection identity","Tool-access control is part of agent governance."],
+ ["d1","Prove an image was AI-generated","C2PA content credentials (provenance metadata) on generated images","Provenance is the audit answer for generated media."],
+ // d2
+ ["d2","Answer from company documents with citations","RAG: Azure AI Search hybrid + semantic, or a Foundry IQ knowledge base","Retrieve, augment the prompt, generate, cite."],
+ ["d2","Many agents share knowledge from SharePoint, Blob, OneLake, web","Foundry IQ knowledge base (agentic retrieval on Azure AI Search)","One knowledge base, many agents, permission-aware, cited answers."],
+ ["d2","Agent calls a REST API described by an OpenAPI spec","OpenAPI tool (server-side, auth via anonymous, key connection or managed identity)","The service makes the call; your app runs no code."],
+ ["d2","Logic must run inside your own app process","Function calling","The model returns a name and JSON arguments; your code executes and returns function_call_output."],
+ ["d2","Compute statistics or draw a chart from an uploaded CSV","Code Interpreter tool","Sandboxed Python execution."],
+ ["d2","Search uploaded PDFs without building an index","File Search tool (vector store)","Managed chunking and embedding."],
+ ["d2","Need current public web information","Web search / Grounding with Bing tool","Data leaves the compliance boundary; show citations as required."],
+ ["d2","Use tools hosted by other systems through a standard protocol","MCP tool (server_label, server_url)","MCP = agent-to-tool."],
+ ["d2","Agents on different frameworks discover and delegate to each other","A2A protocol (agent cards)","A2A = agent-to-agent."],
+ ["d2","Output must match a JSON schema exactly","Structured outputs: json_schema with strict: true","JSON mode guarantees valid JSON, not your schema."],
+ ["d2","Consistent, factual answers","Low temperature (0–0.2). Adjust temperature or top_p, not both","Higher temperature = more varied wording."],
+ ["d2","Model keeps repeating phrases","Raise frequency_penalty","presence_penalty instead nudges toward new topics."],
+ ["d2","Knowledge is fine, style/format inconsistent, prompts very long","Fine-tuning (supervised)","Fine-tuning teaches behaviour; it doesn't add fresh knowledge."],
+ ["d2","Facts change weekly","RAG, not fine-tuning","Re-index data; don't retrain."],
+ ["d2","Training data is chosen vs rejected response pairs","Direct Preference Optimisation (DPO) fine-tuning","SFT uses prompt/ideal-response pairs."],
+ ["d2","Keep multi-turn state on the server","Conversations (agents) or previous_response_id (Responses API)","Chat Completions is stateless: you resend history."],
+ ["d2","Migrating classic threads and runs","Conversations replace threads; responses replace runs; agents are versioned with create_version and invoked by agent_reference","Same mental model, new names."],
+ ["d2","Fixed pipeline: extract → validate → summarise","Sequential orchestration / workflow","Each step feeds the next."],
+ ["d2","Independent analyses at once, then merge","Concurrent orchestration","Fan-out, fan-in."],
+ ["d2","Triage agent passes the user to a specialist who takes over","Handoff orchestration","Control transfers; the specialist talks to the user."],
+ ["d2","Agents debate or refine one output under a manager","Group chat orchestration","Shared conversation, managed turn-taking."],
+ ["d2","Open-ended task, manager plans and assigns work dynamically","Magentic orchestration","Planner/manager maintains a task ledger."],
+ ["d2","Improve answers with self-review","Reflection / evaluator-optimizer loop with a bounded number of iterations","Generator drafts, critic scores, generator revises."],
+ ["d2","Strict business rules plus messy text","Hybrid: deterministic rules/code for policy, LLM for unstructured parts","Never let the LLM make a rule-bound decision alone."],
+ ["d2","Did the agent understand / follow instructions / call tools correctly?","Intent Resolution / Task Adherence / Tool Call Accuracy evaluators","Add Task Completion for end-to-end success."],
+ ["d2","Is the RAG answer supported? Was retrieval relevant?","Groundedness / Retrieval (and Relevance) evaluators","Response Completeness needs ground truth."],
+ ["d2","Compare output to a reference answer","Similarity, F1, BLEU, ROUGE, METEOR","These need ground-truth data."],
+ ["d2","Code-based agent (Agent Framework, LangGraph) run managed by Foundry","Hosted agent","Prompt agents are declarative; workflow agents orchestrate."],
+ ["d2","Put the agent in Teams or Microsoft 365 Copilot","Publish the Foundry agent to Microsoft 365 / Teams","Work IQ brings workplace data in."],
+ // d3
+ ["d3","Create an image from a text prompt","Image generation model (gpt-image-1 family) via the images API","Controls: size, quality, n, background, output format."],
+ ["d3","Change only part of a photo (replace the sky)","Image edit with a mask (inpainting)","Transparent mask pixels mark the area to regenerate."],
+ ["d3","Short video from text or a reference image","Sora 2 via the videos API: create job → poll status → download","Async job; set duration and resolution."],
+ ["d3","Adjust a video you already generated","Remix the existing video with a new prompt","Editing workflow rather than regenerating."],
+ ["d3","Describe photos or answer questions about a chart","Multimodal chat model with image input (detail: high for fine detail)","Send URL or base64 data URL; several images per message allowed."],
+ ["d3","Accessible alt text","Short purpose-focused alt text + extended description for complex images","No 'image of'; say what matters in context."],
+ ["d3","Schema-based fields from images, audio or video","Content Understanding custom analyzer (extract / classify / generate)","Returns markdown plus fields with confidence and grounding."],
+ ["d3","Video chapters, key frames, scene descriptions","Content Understanding video analyzer (segments)","Segment definitions drive per-segment fields."],
+ ["d3","Reason across several documents plus reference data","Content Understanding pro mode (multi-file task)","Pro mode is document-only; newer API versions call this agentic mode."],
+ ["d3","Moderate uploaded images","Content Safety image analysis / guardrail on image input","Hate, sexual, violence, self-harm with severity."],
+ ["d3","Text inside an image tries to override instructions","Treat image text as untrusted: indirect attack detection, spotlighting, explicit system rule","That's indirect prompt injection via multimodal input."],
+ ["d3","Enforce brand rules, flag prohibited symbols","Classify with Content Understanding / custom safety categories + watermarking/provenance","Policy rules become classifier fields plus checks."],
+ // d4
+ ["d4","Find and redact PII before storage, auditable","Azure Language PII detection (text or conversation) with redacted output","Deterministic categories and confidence scores."],
+ ["d4","Sentiment about specific aspects (food good, service bad)","Sentiment analysis with opinion mining","Aspect-level targets and assessments."],
+ ["d4","Trained intents and entities from user utterances","Conversational Language Understanding (CLU)","LUIS is retired."],
+ ["d4","Curated FAQ answers from documents","Custom question answering","QnA Maker is retired."],
+ ["d4","Your own categories, labelled examples","Custom text classification (single- or multi-label)","Custom NER for your own entity types."],
+ ["d4","Medical entities, relations, negation","Text Analytics for health","Healthcare-specific model."],
+ ["d4","Extract entities/summary into JSON with an LLM","Generative prompting + structured outputs schema","Pick Language service for deterministic, cheaper, scored results."],
+ ["d4","Translate text into several languages in one call","Translator: multiple to= parameters; omit from= to auto-detect","Also transliteration and profanity handling."],
+ ["d4","Translate whole Word/PDF files keeping layout","Document Translation (async batch, Blob source/target containers)","Use managed identity or SAS for storage."],
+ ["d4","Domain terms must translate consistently","Custom Translator (or a glossary)","Trained on parallel documents."],
+ ["d4","Hours of recorded calls, overnight","Batch transcription","Async, Blob input."],
+ ["d4","One file, transcript as fast as possible, synchronous","Fast transcription API","Faster than real time."],
+ ["d4","Live captions","Real-time speech to text","Streaming recognition."],
+ ["d4","Who said what","Speaker diarization","Works in real-time and batch."],
+ ["d4","Product names misrecognised","Phrase list first; Custom Speech if still poor","Phrase list needs no training."],
+ ["d4","Control pace, pitch, pauses, pronunciation","SSML: prosody, break, say-as, phoneme","Voice styles via mstts:express-as where supported."],
+ ["d4","Natural voice agent with interruptions and noise","Voice Live API","Speech-to-speech, noise suppression, echo cancellation, turn detection."],
+ ["d4","Spoken Japanese in, English text or voice out","Speech translation (TranslationRecognizer, add target languages)","Can also synthesise the translated speech."],
+ ["d4","Reason over audio itself (tone, background sounds)","Audio-capable multimodal model, not transcript only","A transcript loses paralinguistic cues."],
+ // d5
+ ["d5","Best relevance on meaning and keywords","Hybrid search (BM25 + vector, fused with RRF) + semantic ranker","The default answer for RAG retrieval quality."],
+ ["d5","Exact codes or IDs not found","Keyword or hybrid search","Vectors miss exact tokens such as part numbers."],
+ ["d5","Rerank top results and return captions/answers","Semantic ranker with a semantic configuration","L2 reranking of the top results."],
+ ["d5","Chunk and embed during indexing; vectorise queries automatically","Integrated vectorization: Text Split + Azure OpenAI Embedding skills + vectorizer","No embedding code in the app."],
+ ["d5","Scanned PDFs or images need searchable text","Image extraction (generateNormalizedImages) + OCR + Merge skills, or Document Layout skill","OCR runs on extracted images."],
+ ["d5","Keep headings and tables for chunking","Document Layout skill (markdown, structure-aware chunks)","Built on Document Intelligence layout."],
+ ["d5","Custom enrichment logic","Custom Web API skill (e.g. Azure Function)","Contract: values[] with recordId and data."],
+ ["d5","Keep enriched output for analytics outside search","Knowledge store (table, object, file projections)","Shaper skill builds the projection shape."],
+ ["d5","Re-run only what changed in a skillset","Incremental enrichment (enrichment cache)","Saves cost on re-indexing."],
+ ["d5","Users see only documents they may access","Security trimming: ACL fields + filters (or document-level permissions)","Filter at query time by user/group IDs."],
+ ["d5","Cut vector index cost","Vector compression: scalar/binary quantization, fewer dimensions, stored=false","Trade a little recall for size."],
+ ["d5","Complex multi-part questions across sources","Agentic retrieval (knowledge base): query planning, parallel subqueries","Powers Foundry IQ."],
+ ["d5","Indexer reads Blob with managed identity","Storage Blob Data Reader on the storage account","Search service identity, not the user."],
+ ["d5","App queries the index keylessly","Search Index Data Reader","Contributor variant to write documents; Search Service Contributor to manage definitions."],
+ ["d5","Invoices, receipts, IDs","Document Intelligence prebuilt models","No training."],
+ ["d5","Fixed-layout forms, few samples","Custom template model","Varied layouts → custom neural model."],
+ ["d5","Route mixed document types to the right model","Custom classifier (or composed model)","Classify, then extract."],
+ ["d5","Checkbox state on forms","Selection marks (layout model)","Returned as selected / unselected."],
+ ["d5","Clean grounded markdown and fields for agents/RAG","Content Understanding analyzer","Generative, schema-based, multimodal; Document Intelligence is deterministic OCR/layout."]
+];
+let rxDomain="all", rxQuery="", rxDrill=store.get("rxDrill",false);
+const rxF = document.getElementById("rxFilters");
+rxF.innerHTML = [["all","All"],...Object.entries(D).map(([k,v])=>[k,v.name])].map(([k,n])=>`<button class="filter" data-d="${k}" aria-pressed="${k==="all"}">${n}</button>`).join("");
+rxF.addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;rxDomain=b.dataset.d;rxF.querySelectorAll(".filter").forEach(x=>x.setAttribute("aria-pressed",x===b));renderRx()});
+document.getElementById("rxSearch").addEventListener("input",e=>{rxQuery=e.target.value.toLowerCase();renderRx()});
+const drillBox=document.getElementById("rxDrill");drillBox.checked=rxDrill;
+drillBox.addEventListener("change",e=>{rxDrill=e.target.checked;store.set("rxDrill",rxDrill);renderRx()});
+function renderRx(){
+  const rows = RX.filter(r=>(rxDomain==="all"||r[0]===rxDomain)&&(!rxQuery||(r[1]+" "+r[2]+" "+r[3]).toLowerCase().includes(rxQuery)));
+  document.getElementById("rxCount").textContent = `${rows.length} of ${RX.length} reflexes${rxDrill?" · click a row to reveal":""}`;
+  const list=document.getElementById("rxList");
+  list.innerHTML = rows.map(r=>`<div class="rx ${rxDrill?"hide":""}" style="--dc:var(--${r[0]})" tabindex="${rxDrill?0:-1}"><div class="q">${esc(r[1])}</div><div class="a">${esc(r[2])}</div><div class="why">${esc(r[3])}</div></div>`).join("");
+}
+document.getElementById("rxList").addEventListener("click",e=>{const r=e.target.closest(".rx.hide");if(r)r.classList.remove("hide")});
+document.getElementById("rxList").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const r=e.target.closest(".rx.hide");if(r){e.preventDefault();r.classList.remove("hide")}}});
+renderRx();
+
+/* ---------------- QUIZ ---------------- */
+const Q = [
+ {d:"d1",q:"Contoso summarises 2 million support tickets every night. Results are needed by the next morning and cost must be minimised. Which deployment type?",o:["Standard (regional)","Provisioned throughput (PTU)","Global Batch","Data Zone Standard"],a:2,e:"Global Batch processes large async jobs with a 24-hour target turnaround at roughly half the price of Global Standard, using separate quota so it doesn't starve online traffic.",t:"PTU sounds 'enterprise' but you'd pay for reserved capacity that sits idle most of the day."},
+ {d:"d1",q:"A trading assistant needs consistent low latency under steady heavy load. The Standard deployment returns HTTP 429 at peaks. What should you change?",o:["Lower max_tokens","Move to a provisioned throughput (PTU) deployment","Switch to Global Batch","Lower the temperature"],a:1,e:"Provisioned throughput reserves model capacity, giving predictable latency and throughput. Standard is shared pay-as-you-go capacity bound by TPM/RPM quota.",t:"max_tokens reduces tokens per call, but it doesn't guarantee latency or remove the quota ceiling."},
+ {d:"d1",q:"A web app on Azure App Service must call a Foundry project. Security requires that no secrets are stored or rotated. What do you implement?",o:["Store the API key in Azure Key Vault and reference it","System-assigned managed identity, Foundry User role, DefaultAzureCredential","A SAS token in app settings","An API key in a connection string"],a:1,e:"Keyless authentication uses Microsoft Entra tokens from a managed identity. Assign the least-privilege role (Foundry User) and optionally disable local key auth.",t:"Key Vault is the classic distractor. It protects a key, but you still have a key."},
+ {d:"d1",q:"An EU bank needs model processing to stay within the EU but wants more throughput than a single region provides. Which deployment type?",o:["Global Standard","Data Zone Standard (EU)","Standard in one EU region only","Global Batch"],a:1,e:"Data Zone deployments route traffic across regions inside the EU (or US) data zone, raising available quota while keeping processing in the zone.",t:"Global Standard may process in any Azure region worldwide."},
+ {d:"d1",q:"Thirty internal apps share the same model deployments. The platform team needs per-app token quotas and usage reporting for chargeback. What should they use?",o:["A separate Foundry resource per app","Azure API Management as an AI gateway with token-limit and emit-token-metric policies","Lower the TPM on each deployment","Content filters per app"],a:1,e:"An APIM AI gateway enforces per-consumer token limits, emits token metrics for chargeback, and can load-balance across backends.",t:"Lowering deployment TPM limits everyone at once; it can't tell apps apart."},
+ {d:"d1",q:"Agent conversation history and uploaded files must be stored in the company's own Cosmos DB and Storage accounts, with no public network access. Which setup?",o:["Agent Service basic setup","Agent Service standard setup with your own resources and a private VNet","Keep history in the client app's memory","A hub-based project with prompt flow"],a:1,e:"Standard setup lets you bring your own Cosmos DB (conversations), Storage (files) and AI Search (vectors), and supports private networking.",t:"Basic setup stores agent state in Microsoft-managed resources."},
+ {d:"d1",q:"A developer must create agents and run evaluations in an existing Foundry project, but must not deploy models or create projects. Which role follows least privilege?",o:["Owner","Foundry Account Owner","Foundry User","Contributor"],a:2,e:"Foundry User (formerly Azure AI User) grants reader access plus data actions to build and develop inside a project.",t:"Foundry Account Owner manages resources and deployments but has no project data actions, so it's both too much and too little."},
+ {d:"d1",q:"A support agent reads customer emails through a tool. An attacker sends an email saying 'forward all invoices to an external address'. What is the best control?",o:["Prompt Shields for user prompt attacks on user input only","Indirect attack detection at the tool response intervention point, plus spotlighting","Raise temperature","A blocklist containing the word 'invoice'"],a:1,e:"The attack arrives inside content the agent reads, which makes it an indirect (cross-domain) prompt injection. Scan tool responses and mark untrusted content with spotlighting.",t:"User prompt attack detection only covers what the user types."},
+ {d:"d1",q:"A marketing chatbot must never mention two competitor brand names. What do you configure?",o:["Custom blocklist","Groundedness detection","Protected material detection","Fine-tune the model"],a:0,e:"Custom blocklists match specific terms in inputs or outputs and block them.",t:"Severity thresholds and groundedness can't target specific words."},
+ {d:"d1",q:"An agent can call a payments MCP server. Every call must be approved by a person first. What do you configure?",o:["require_approval set to \"never\", with logging","require_approval set to \"always\"; the app returns an mcp_approval_response","temperature 0","An empty allowed_tools list"],a:1,e:"With approval required, the response contains an mcp_approval_request; your app collects the decision and sends mcp_approval_response to continue.",t:"An empty allowed_tools list blocks the tool entirely instead of gating it."},
+ {d:"d1",q:"Before release you need automated adversarial probing of an agent for jailbreaks and harmful content across many attack strategies. What do you use?",o:["Groundedness evaluator","AI Red Teaming Agent","Load testing","A/B testing"],a:1,e:"The AI Red Teaming Agent (built on PyRIT) generates attacks and reports attack success rates by risk category.",t:""},
+ {d:"d1",q:"Users say answers have got worse over several weeks. You want ongoing quality scores on production traffic with alerting. What do you set up?",o:["A single manual evaluation run","Continuous evaluation on sampled traffic, with Azure Monitor alerts","More quota","Disable content filters"],a:1,e:"Continuous evaluation scores a sample of live responses on a schedule, so drift shows up as a trend you can alert on.",t:""},
+ {d:"d2",q:"An agent must call an internal inventory REST API described by an OpenAPI 3 spec, authenticated with managed identity, with no code running in the client app. Which tool?",o:["Function calling","OpenAPI tool with managed identity authentication","Code Interpreter","File Search"],a:1,e:"The OpenAPI tool is executed by the service, which authenticates with anonymous, key-connection or managed-identity auth.",t:"Function calling requires your app to execute the function."},
+ {d:"d2",q:"With function calling, the model returns a function_call item. What must the application do next?",o:["Nothing; Foundry runs the function","Run the function and send the result back as a function_call_output item","Resend the original prompt with higher temperature","Start a new conversation"],a:1,e:"The model only selects the function and generates JSON arguments. Your code executes it and returns the output, matched by call_id, so the model can produce the final answer.",t:""},
+ {d:"d2",q:"Downstream code parses the model's answer and breaks when fields are missing. Responses must always match a JSON schema. What do you use?",o:["Write 'respond in JSON' in the system prompt","Structured outputs with a json_schema and strict: true","Raise max_tokens","Raise frequency_penalty"],a:1,e:"Structured outputs constrain generation to the supplied schema.",t:"JSON mode returns valid JSON but doesn't enforce your fields."},
+ {d:"d2",q:"A model gets the facts right, but tone and format drift from the brand guide. The few-shot prompt already costs 3,000 tokens per call. What is the best fix?",o:["RAG over the brand guide","Supervised fine-tuning on approved examples","Raise temperature","Use a larger context window"],a:1,e:"Fine-tuning teaches consistent style and format and lets you drop long few-shot prompts, reducing cost and latency.",t:"RAG adds knowledge, not consistent behaviour."},
+ {d:"d2",q:"A chatbot must answer questions about HR policies that change every week. What approach?",o:["Fine-tune weekly","RAG over an index of the current policies","Use a larger model","Add more few-shot examples"],a:1,e:"Retrieval grounds answers in the current documents. Update the index, not the model.",t:"Fine-tuning for freshness is the classic wrong answer."},
+ {d:"d2",q:"Legacy code uses the classic Agents API with threads and runs. What are the equivalents in the current Foundry Agent Service?",o:["Threads become conversations; runs become responses","Threads become vector stores","Runs become evaluations","Nothing changes"],a:0,e:"Agents are created with create_version (PromptAgentDefinition) and invoked with responses.create, passing the conversation and an agent_reference.",t:""},
+ {d:"d2",q:"An intake agent classifies an insurance claim and then transfers the user entirely to the right specialist agent, who continues the conversation. Which pattern?",o:["Concurrent","Handoff","Sequential","Magentic"],a:1,e:"Handoff transfers control of the conversation to the most suitable agent.",t:"Sequential passes outputs along a fixed chain; the user doesn't move between agents."},
+ {d:"d2",q:"Legal, financial and technical reviews of the same contract should run at the same time and be combined into one report. Which pattern?",o:["Concurrent","Handoff","Group chat","A single agent"],a:0,e:"Concurrent orchestration fans the task out to independent agents and aggregates the results.",t:""},
+ {d:"d2",q:"Agents built by different vendors on different frameworks must discover each other's capabilities and delegate tasks. What should you implement?",o:["MCP","The A2A protocol with agent cards","A shared vector store","OpenAPI tools only"],a:1,e:"Agent-to-Agent (A2A) provides discovery through agent cards and direct task delegation between remote agents.",t:"MCP connects an agent to tools, not to other agents as peers."},
+ {d:"d2",q:"Traces show an agent picks the wrong tool or passes wrong parameters. Which evaluator measures this?",o:["Fluency","Tool Call Accuracy","BLEU","Coherence"],a:1,e:"Tool Call Accuracy checks tool selection, parameter correctness and efficiency. Pair it with Intent Resolution and Task Adherence for agents.",t:""},
+ {d:"d2",q:"RAG answers contain claims that are not in the retrieved context. Which evaluator detects this?",o:["Groundedness","Fluency","Similarity","Intent Resolution"],a:0,e:"Groundedness measures whether the response is supported by the provided context.",t:"Similarity needs a ground-truth answer and measures closeness, not support."},
+ {d:"d2",q:"An FAQ bot gives different wording and sometimes different facts for the same question. You want consistent, factual output. What do you change?",o:["Set temperature to about 0.1","Set temperature 1.2 and top_p 0.5","Set presence_penalty to 2","Raise max_tokens"],a:0,e:"Low temperature makes output more deterministic. Adjust temperature or top_p, not both.",t:""},
+ {d:"d2",q:"You use a reasoning model and want to trade answer depth against cost and latency. Which setting?",o:["top_p","reasoning_effort","frequency_penalty","n"],a:1,e:"Reasoning models expose reasoning_effort (for example low, medium, high). Sampling parameters such as temperature are generally not supported.",t:""},
+ {d:"d2",q:"You need per-step latency, token counts and tool spans for every agent run. What do you configure?",o:["Azure Advisor","Application Insights connected to the project with OpenTelemetry tracing","Storage analytics logs","The Azure activity log"],a:1,e:"Foundry tracing uses OpenTelemetry and stores traces in Application Insights, giving spans for model calls, tool calls, tokens and latency.",t:"The activity log records management operations, not inference."},
+ {d:"d3",q:"A retailer wants to replace the background of product photos while keeping the product pixel-identical. What do you use?",o:["Generate a new image from a text prompt","An image edit with a mask (inpainting) using an image generation model","OCR","Sora remix"],a:1,e:"Mask-based editing regenerates only the masked (transparent) area and keeps the rest of the image.",t:""},
+ {d:"d3",q:"An agency needs an 8-second promo clip from a reference product image, then wants to tweak the scene with a new prompt. What workflow?",o:["gpt-image-1 generation","Sora 2: image-to-video with an input reference, then remix","Video Indexer","Content Understanding"],a:1,e:"The videos API is asynchronous: create the job, poll status, download. Remix edits an existing generated video with a new prompt.",t:""},
+ {d:"d3",q:"From claim photos and PDFs you need: damage type (from a fixed list), a severity summary, and the exact policy number, with confidence and source grounding. What do you build?",o:["A Content Understanding custom analyzer using classify, generate and extract field methods","Translator","Custom Vision","Language NER"],a:0,e:"Content Understanding fields support extract (literal values), classify (fixed categories) and generate (free-form), with confidence and grounding where enabled.",t:"Extract is supported for documents; use generate or classify for images, audio and video."},
+ {d:"d3",q:"Users upload screenshots to a multimodal assistant. Some contain text telling the model to reveal its system prompt. What do you do?",o:["Nothing; images can't carry prompts","Treat image text as untrusted: indirect attack detection, spotlighting and a system rule not to follow embedded instructions","Disable vision","Raise max tokens"],a:1,e:"Embedded text in images is an indirect prompt-injection vector, handled like any untrusted document content.",t:""},
+ {d:"d3",q:"A news site generates alt text for photos and complex charts. Which approach meets accessibility guidance?",o:["Long text starting 'Image of a photo of…'","Short, purpose-focused alt text, with an extended description for complex charts","The file name","A keyword list"],a:1,e:"Alt text should convey meaning in context briefly; complex visuals get a longer description elsewhere.",t:""},
+ {d:"d4",q:"You must detect and redact phone numbers and ID numbers in chat transcripts before storage, in a deterministic, auditable way. What do you use?",o:["Azure Language PII detection (conversation PII) with redaction","Sentiment analysis","A general LLM prompt","Translator"],a:0,e:"PII detection returns categorised entities with confidence plus redacted text, which is repeatable and auditable.",t:"An LLM prompt can work but isn't the deterministic, auditable answer."},
+ {d:"d4",q:"A contact centre drops 10,000 recorded calls into Blob Storage each night and needs transcripts with speaker labels. What do you use?",o:["Real-time speech to text","Batch transcription with diarization","Text to speech","Voice Live"],a:1,e:"Batch transcription processes large volumes asynchronously from storage; diarization labels speakers.",t:"Fast transcription is for single files you need back quickly, not bulk overnight jobs."},
+ {d:"d4",q:"Medical product names are often misrecognised. What should you try first, without training a model?",o:["Custom neural voice","A phrase list","SSML","Batch transcription"],a:1,e:"Phrase lists boost recognition of specific words at runtime. Move to Custom Speech if accuracy is still poor.",t:""},
+ {d:"d4",q:"A hotel booking voice agent must handle interruptions naturally, suppress background noise and respond with low latency. What do you use?",o:["Batch transcription plus TTS","Voice Live API","Translator","Document Translation"],a:1,e:"Voice Live provides low-latency speech-to-speech with noise suppression, echo cancellation and turn detection for voice agents.",t:""},
+ {d:"d4",q:"You must translate 500 Word and PDF contracts from German into English and French, preserving layout. What do you use?",o:["Text translation per paragraph","Document Translation batch job with Blob source and target containers","Custom question answering","Speech translation"],a:1,e:"Document Translation translates whole files asynchronously, preserves formatting and supports multiple target languages.",t:""},
+ {d:"d5",q:"Searches for part number 'XJ-4471-B' fail in a vector-only index. What do you change?",o:["Increase k","Use hybrid search (keyword plus vector)","Use more embedding dimensions","Return semantic captions only"],a:1,e:"Keyword (BM25) matching finds exact tokens; hybrid merges keyword and vector results with Reciprocal Rank Fusion.",t:""},
+ {d:"d5",q:"You want language-aware reranking of the top results and extractive captions. What do you enable?",o:["A scoring profile","Semantic ranker with a semantic configuration","Facets","A synonym map"],a:1,e:"Semantic ranker reranks top results using deep language models and can return captions and answers.",t:"Scoring profiles boost by field or freshness rules, not meaning."},
+ {d:"d5",q:"A Blob container holds scanned PDFs. The indexer must produce searchable text, including text inside images. What do you configure?",o:["Text Split only","Image extraction (generateNormalizedImages) with OCR and Merge skills, or the Document Layout skill","Key Phrase skill","A synonym map"],a:1,e:"Normalized images feed the OCR skill; Merge puts OCR text back in reading order. Document Layout is the structure-aware alternative.",t:""},
+ {d:"d5",q:"The indexer should chunk documents and create embeddings automatically, and queries should be vectorised at query time. What do you use?",o:["Integrated vectorization: Text Split + Azure OpenAI Embedding skills and a vectorizer","Call the embeddings API in the app","Semantic ranker","A scoring profile"],a:0,e:"Integrated vectorization handles chunking and embedding in the pipeline; a vectorizer on the index embeds text queries.",t:""},
+ {d:"d5",q:"Your skillset needs custom Python enrichment logic. What do you add?",o:["A Custom Web API skill hosted in Azure Functions","Shaper skill","Knowledge store","Synonym map"],a:0,e:"The Custom Web API skill calls your endpoint using the values[]/recordId/data contract.",t:""},
+ {d:"d5",q:"You must extract fields from supplier forms whose layouts vary across 50 vendors. Which Document Intelligence model?",o:["Custom template","Custom neural","Read","Prebuilt receipt"],a:1,e:"Custom neural models handle structured and semi-structured documents with varying layouts.",t:"Custom template suits fixed layouts with few samples."},
+ {d:"d5",q:"The search service's managed identity must read documents from Blob Storage. Which role do you assign on the storage account?",o:["Storage Blob Data Reader","Search Index Data Reader","Owner","Storage Account Contributor"],a:0,e:"Least privilege for reading blob data is Storage Blob Data Reader.",t:"Storage Account Contributor is management plane and doesn't grant data access."},
+ {d:"d5",q:"An agent app queries a search index keylessly at runtime. Which role does the app identity need on the search service?",o:["Search Index Data Reader","Search Service Contributor","Search Index Data Contributor","Reader"],a:0,e:"Search Index Data Reader allows queries. Data Contributor adds write; Service Contributor manages definitions.",t:""}
+];
+let qDomain = store.get("qDomain","all");
+let answers = store.get("answers",{}); // idx -> chosen
+let missedOnly = false, qPos = 0;
+function qPool(){
+  return Q.map((q,i)=>({...q,i})).filter(q=>(qDomain==="all"||q.d===qDomain)&&(!missedOnly||(answers[q.i]!==undefined&&answers[q.i]!==q.a)));
+}
+const qF=document.getElementById("qFilters");
+function renderQFilters(){
+  qF.innerHTML=[["all","All domains"],...Object.entries(D).map(([k,v])=>[k,v.name])].map(([k,n])=>`<button class="filter" data-d="${k}" aria-pressed="${k===qDomain&&!missedOnly}">${n}</button>`).join("")+
+   `<button class="filter" data-m="1" aria-pressed="${missedOnly}">Retry missed</button>`;
+}
+qF.addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
+  if(b.dataset.m){missedOnly=!missedOnly;if(missedOnly){qPool().forEach(q=>delete answers[q.i]);}}
+  else{qDomain=b.dataset.d;missedOnly=false;store.set("qDomain",qDomain)}
+  qPos=0;renderQFilters();renderQ()});
+function renderQ(){
+  const pool=qPool(), card=document.getElementById("qCard");
+  if(missedOnly && !pool.length){card.innerHTML=`<h3>No missed questions here</h3><p class="lede">Everything you've answered in this set is correct. Pick another domain or reset.</p>`;renderScore();return}
+  if(!pool.length){card.innerHTML="<p>No questions.</p>";renderScore();return}
+  if(qPos>=pool.length)qPos=pool.length-1;
+  const q=pool[qPos], chosen=answers[q.i], done=chosen!==undefined;
+  card.innerHTML=`
+   <div class="qmeta">${chip(q.d)}<span class="count">Question ${qPos+1} of ${pool.length}</span></div>
+   <div class="qtext">${esc(q.q)}</div>
+   <div class="opts">${q.o.map((o,k)=>{
+     let cls=""; if(done){ if(k===q.a)cls="right"; else if(k===chosen)cls="wrong"; }
+     return `<button class="opt ${cls}" data-k="${k}" ${done?"disabled":""}><span class="k">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`}).join("")}</div>
+   ${done?`<div class="explain"><div class="verdict ${chosen===q.a?"ok":"bad"}">${chosen===q.a?"Correct":"Not this time · answer "+"ABCD"[q.a]}</div><div>${esc(q.e)}</div>${q.t?`<div class="trap"><b>Distractor:</b> ${esc(q.t)}</div>`:""}</div>`:""}
+   <div class="qnav"><button class="btn ghost" id="qPrev" ${qPos===0?"disabled":""}>Previous</button><button class="btn" id="qNext" ${qPos>=pool.length-1?"disabled":""}>Next question</button></div>`;
+  card.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{answers[q.i]=+b.dataset.k;if(!missedOnly)store.set("answers",answers);renderQ()}));
+  document.getElementById("qPrev").onclick=()=>{qPos--;renderQ()};
+  document.getElementById("qNext").onclick=()=>{qPos++;renderQ()};
+  renderScore();
+}
+function renderScore(){
+  const per=Object.keys(D).map(k=>{const qs=Q.map((q,i)=>({...q,i})).filter(q=>q.d===k);const ans=qs.filter(q=>answers[q.i]!==undefined);const ok=ans.filter(q=>answers[q.i]===q.a).length;return{k,total:qs.length,ans:ans.length,ok}});
+  const ans=per.reduce((a,b)=>a+b.ans,0), ok=per.reduce((a,b)=>a+b.ok,0);
+  // weighted estimate by exam domain weight
+  const tw=per.filter(p=>p.ans).reduce((a,p)=>a+D[p.k].w,0);
+  const est=tw?Math.round(per.filter(p=>p.ans).reduce((a,p)=>a+D[p.k].w*(p.ok/p.ans),0)/tw*100):null;
+  document.getElementById("qScore").innerHTML=`
+    <div><div class="eyebrow">Accuracy</div><div class="big">${ans?Math.round(ok/ans*100)+"%":"–"}</div><div class="pass">${ok} correct of ${ans} answered · ${Q.length} total</div></div>
+    ${est!==null?`<div class="pass">Weighted by exam domain weights: <b style="color:var(--ink)">${est}%</b>${est>=80?" · on track":" · keep drilling"}</div>`:""}
+    ${per.map(p=>{const pct=p.ans?Math.round(p.ok/p.ans*100):0;return `<div class="drow"><span>${D[p.k].name}</span><span>${p.ans?pct+"%":"–"} <span class="pass">${p.ans}/${p.total}</span></span><div class="meter"><i style="width:${pct}%;background:var(--${p.k})"></i></div></div>`}).join("")}
+    <button class="btn ghost" id="qReset">Reset all answers</button>`;
+  document.getElementById("qReset").onclick=()=>{answers={};store.set("answers",answers);missedOnly=false;qPos=0;renderQFilters();renderQ()};
+}
+renderQFilters();renderQ();
+
+/* ---------------- CODE ---------------- */
+const CODE=[
+ {t:"Connect to a Foundry project and call a model",d:"d2",p:"Project endpoint + Entra ID. The project hands you an OpenAI client for the Responses API.",
+  c:`from azure.identity import DefaultAzureCredential
+from azure.ai.projects import AIProjectClient
+
+project = AIProjectClient(
+    endpoint="https://<resource>.services.ai.azure.com/api/projects/<project>",
+    credential=DefaultAzureCredential(),          # keyless: managed identity / dev login
+)
+openai = project.get_openai_client()
+
+resp = openai.responses.create(
+    model="gpt-4.1-mini",                         # your deployment name
+    instructions="Answer in two sentences.",
+    input="What is our refund window?",
+)
+print(resp.output_text)`,
+  m:"Endpoint shape <code>…services.ai.azure.com/api/projects/&lt;project&gt;</code>. <code>model</code> is the deployment name, not the model family."},
+ {t:"Create a versioned prompt agent and chat with it",d:"d2",p:"create_version → conversations.create → responses.create with agent_reference.",
+  c:`from azure.ai.projects.models import PromptAgentDefinition
+
+agent = project.agents.create_version(
+    agent_name="hr-policy-agent",
+    definition=PromptAgentDefinition(
+        model="gpt-4.1-mini",
+        instructions="Answer HR policy questions. Cite the policy name.",
+    ),
+)
+
+conv = openai.conversations.create()              # replaces threads
+r = openai.responses.create(                      # replaces runs
+    conversation=conv.id,
+    input="How many days of parental leave do I get?",
+    extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+)
+print(r.output_text)`,
+  m:"Conversation keeps state server-side. Each create_version produces a new immutable version you can promote."},
+ {t:"Function calling loop",d:"d2",p:"The model chooses; your code executes; you return function_call_output.",
+  c:`import json
+tools = [{
+  "type": "function", "name": "get_order_status",
+  "description": "Look up an order's shipping status",
+  "parameters": {"type": "object",
+                 "properties": {"order_id": {"type": "string"}},
+                 "required": ["order_id"]},
+}]
+
+r = openai.responses.create(model="gpt-4.1-mini", input="Where is order 8812?", tools=tools)
+
+outputs = []
+for item in r.output:
+    if item.type == "function_call":
+        result = get_order_status(**json.loads(item.arguments))   # YOUR code runs
+        outputs.append({"type": "function_call_output",
+                        "call_id": item.call_id,
+                        "output": json.dumps(result)})
+
+final = openai.responses.create(model="gpt-4.1-mini", previous_response_id=r.id,
+                                input=outputs, tools=tools)
+print(final.output_text)`,
+  m:"Match outputs by <code>call_id</code>. <code>previous_response_id</code> chains state without resending history."},
+ {t:"MCP tool with human approval and tool allow-list",d:"d1",p:"Governance in code: gate the call and limit the surface.",
+  c:`from azure.ai.projects.models import MCPTool, PromptAgentDefinition
+
+payments = MCPTool(
+    server_label="payments",
+    server_url="https://payments.contoso.com/mcp",
+    require_approval="always",            # human-in-the-loop
+    allowed_tools=["create_refund"],      # least privilege
+    project_connection_id="payments-conn" # auth stored as a project connection
+)
+agent = project.agents.create_version(
+    agent_name="refund-agent",
+    definition=PromptAgentDefinition(model="gpt-4.1", instructions="...", tools=[payments]),
+)
+
+# When the response contains an item of type "mcp_approval_request":
+# send {"type": "mcp_approval_response", "approval_request_id": item.id, "approve": True}`,
+  m:"Approval request → your UI asks a person → approval response continues the run."},
+ {t:"Structured outputs",d:"d2",p:"Schema-enforced JSON for downstream parsing.",
+  c:`schema = {
+  "type": "object",
+  "properties": {
+    "vendor":   {"type": "string"},
+    "total":    {"type": "number"},
+    "currency": {"type": "string", "enum": ["AUD", "USD", "EUR"]}
+  },
+  "required": ["vendor", "total", "currency"],
+  "additionalProperties": False
+}
+r = openai.responses.create(
+    model="gpt-4.1-mini",
+    input=invoice_text,
+    text={"format": {"type": "json_schema", "name": "invoice",
+                     "schema": schema, "strict": True}},
+)`,
+  m:"<code>strict: true</code> plus <code>additionalProperties: false</code> is what makes it schema-exact."},
+ {t:"Image input for captions, alt text or visual Q&A",d:"d3",p:"Text and image parts in one user message.",
+  c:`r = openai.responses.create(
+    model="gpt-4.1",
+    input=[{
+      "role": "user",
+      "content": [
+        {"type": "input_text",
+         "text": "Write alt text under 125 characters. Only describe what is visible."},
+        {"type": "input_image",
+         "image_url": "data:image/jpeg;base64,<...>", "detail": "high"},
+      ],
+    }],
+)`,
+  m:"<code>detail: high</code> for small text or fine detail; low to save tokens. Several images can go in one message."},
+ {t:"Image edit with a mask",d:"d3",p:"Regenerate only the masked area.",
+  c:`result = openai.images.edit(
+    model="gpt-image-1",
+    image=open("living_room.png", "rb"),
+    mask=open("sofa_mask.png", "rb"),   # transparent pixels = area to replace
+    prompt="Replace the sofa with a green velvet sofa, same lighting",
+    size="1024x1024",
+)`,
+  m:"Mask must match the image size. Transparent region is edited, opaque region is kept."},
+ {t:"Hybrid + semantic query on Azure AI Search",d:"d5",p:"Keyword and vector in one request, then semantic reranking.",
+  c:`from azure.search.documents import SearchClient
+from azure.search.documents.models import VectorizableTextQuery
+
+client = SearchClient(endpoint, "policies-index", DefaultAzureCredential())  # Search Index Data Reader
+results = client.search(
+    search_text=question,                                   # BM25 keyword leg
+    vector_queries=[VectorizableTextQuery(                  # vector leg, vectorised by the index's vectorizer
+        text=question, k_nearest_neighbors=50, fields="contentVector")],
+    query_type="semantic",
+    semantic_configuration_name="default",
+    filter="group_ids/any(g: search.in(g, 'hr,all-staff'))",  # security trimming
+    top=5,
+)`,
+  m:"RRF fuses the two legs; semantic ranker reranks the fused top results."},
+ {t:"Custom Web API skill contract",d:"d5",p:"What your Azure Function receives and returns.",
+  c:`// Request from the indexer
+{ "values": [ { "recordId": "1", "data": { "text": "Contract body..." } } ] }
+
+// Your response
+{ "values": [ {
+    "recordId": "1",
+    "data": { "riskLevel": "high" },
+    "errors": [], "warnings": []
+} ] }`,
+  m:"Echo every <code>recordId</code>. Batch size and timeout are set on the skill."},
+ {t:"SSML for speech output",d:"d4",p:"Control voice, pace, pitch and pauses.",
+  c:`<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-AU">
+  <voice name="en-AU-NatashaNeural">
+    <prosody rate="-10%" pitch="+5%">Your booking is confirmed.</prosody>
+    <break time="500ms"/>
+    Reference <say-as interpret-as="characters">QX7</say-as>.
+  </voice>
+</speak>`,
+  m:"prosody = rate/pitch/volume; break = pauses; say-as = how to read numbers, dates, characters; phoneme = exact pronunciation."},
+ {t:"Evaluate an agent or RAG app",d:"d2",p:"AI-assisted evaluators over a JSONL dataset.",
+  c:`from azure.ai.evaluation import (evaluate, GroundednessEvaluator,
+    IntentResolutionEvaluator, TaskAdherenceEvaluator, ToolCallAccuracyEvaluator)
+
+judge = {"azure_endpoint": "...", "azure_deployment": "gpt-4.1"}   # judge model
+result = evaluate(
+    data="eval_set.jsonl",          # query, response, context, tool_calls, ...
+    evaluators={
+        "groundedness": GroundednessEvaluator(judge),
+        "intent":       IntentResolutionEvaluator(judge),
+        "adherence":    TaskAdherenceEvaluator(judge),
+        "tools":        ToolCallAccuracyEvaluator(judge),
+    },
+    azure_ai_project=project_endpoint,   # log results to the Foundry project
+)`,
+  m:"Run this in CI as a release gate; run continuous evaluation in production."},
+ {t:"Translate into several languages in one call",d:"d4",p:"Translator text REST: repeat the to parameter.",
+  c:`POST {endpoint}/translate?api-version=3.0&to=en&to=fr&to=ja
+Content-Type: application/json
+Authorization: Bearer <Entra token>     (or Ocp-Apim-Subscription-Key + Ocp-Apim-Subscription-Region)
+
+[ { "Text": "Der Vertrag endet am 30. Juni." } ]`,
+  m:"Leave out <code>from</code> to auto-detect. Whole files go to Document Translation instead."}
+];
+document.getElementById("codeList").innerHTML=CODE.map((c,i)=>`
+ <div class="code"><div class="code-head"><div style="min-width:0"><h3>${esc(c.t)}</h3><p>${esc(c.p)}</p></div><div style="display:flex;gap:8px;align-items:center">${chip(c.d)}<button class="copy" data-i="${i}">Copy</button></div></div>
+ <pre><code>${esc(c.c)}</code></pre><div class="memo"><b>Remember:</b> ${c.m}</div></div>`).join("");
+document.getElementById("codeList").addEventListener("click",e=>{const b=e.target.closest(".copy");if(!b)return;
+  const txt=CODE[+b.dataset.i].c;
+  const done=()=>{b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1400)};
+  try{navigator.clipboard.writeText(txt).then(done,()=>{selectPre(b)})}catch(err){selectPre(b)}});
+function selectPre(b){const pre=b.closest(".code").querySelector("pre");const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected, press Ctrl+C"}
+
+/* ---------------- TRAPS ---------------- */
+const TRAPS=[
+ ["Store the key in Key Vault","Managed identity + RBAC (keyless)","When the scenario says 'no secrets' or 'keyless', any key-based option is wrong, even a well-protected one."],
+ ["Fine-tune so the model knows new facts","RAG","Fine-tuning changes behaviour and format. Fresh or private knowledge comes from retrieval."],
+ ["JSON mode","Structured outputs (strict schema)","Valid JSON is not the same as your schema."],
+ ["Function calling for a server-side API","OpenAPI tool","Function calling means your app executes. OpenAPI tool means the service executes."],
+ ["MCP for agent-to-agent delegation","A2A","MCP connects agents to tools; A2A connects agents to agents."],
+ ["Global Standard for EU data residency","Data Zone Standard (EU)","Global may process in any region."],
+ ["Foundry Account Owner for a developer","Foundry User","Account Owner manages resources but has no data actions in projects."],
+ ["Prompt Shields user prompt attacks for poisoned documents","Indirect (document) attack detection + spotlighting","Where the attack enters decides the control."],
+ ["Vector-only search","Hybrid + semantic ranker","Vectors miss exact IDs; hybrid is the default retrieval answer."],
+ ["Set both temperature and top_p","Change one of them","Microsoft guidance: adjust one sampling control, not both."],
+ ["Custom Speech as the first fix","Phrase list first","Least effort that solves the problem wins on Microsoft exams."],
+ ["Real-time STT for a backlog of recordings","Batch transcription","Fast transcription for one file quickly; batch for volume."],
+ ["Document Intelligence for generative fields","Content Understanding","Need classify/generate fields, multimodal input or grounded markdown for agents? Content Understanding."],
+ ["Custom template for varied layouts","Custom neural","Template = fixed layout; neural = varied layouts."],
+ ["Storage Account Contributor for indexer data access","Storage Blob Data Reader","Management-plane roles don't grant data access."],
+ ["A one-off evaluation to catch drift","Continuous evaluation + alerts","Drift is a trend; you need ongoing measurement."],
+ ["An empty allowed_tools list to require approval","require_approval = always","Gate the call rather than removing the tool."],
+ ["PTU for a nightly batch job","Global Batch","Reserved capacity idles most of the day; batch is about half price."]
+];
+document.getElementById("trapList").innerHTML=TRAPS.map((t,i)=>`<div class="tp"><span class="eyebrow">Trap ${i+1}</span><span class="no">${esc(t[0])}</span><span class="yes">${esc(t[1])}</span><p>${esc(t[2])}</p></div>`).join("");
+const RENAME=[
+ ["Azure AI Foundry / Azure AI Studio","Microsoft Foundry"],
+ ["Azure AI services (Language, Speech, Vision…)","Foundry Tools (e.g. Azure Language in Foundry Tools)"],
+ ["Azure AI User / Project Manager / Account Owner / Owner","Foundry User / Foundry Project Manager / Foundry Account Owner / Foundry Owner"],
+ ["Agents API threads and runs","Conversations and responses; agents versioned with create_version"],
+ ["Semantic Kernel agents / AutoGen","Microsoft Agent Framework"],
+ ["Azure OpenAI On Your Data","Foundry IQ knowledge bases / Azure AI Search tool"],
+ ["Content filters (alone)","Guardrails: controls with risks, intervention points and actions"],
+ ["LUIS","Conversational Language Understanding (CLU)"],
+ ["QnA Maker","Custom question answering"],
+ ["Form Recognizer","Document Intelligence"],
+ ["AI-102 (Azure AI Engineer)","AI-103 (retired AI-102 on 30 June 2026)"]
+];
+document.getElementById("renameRows").innerHTML=RENAME.map(r=>`<tr><td>${esc(r[0])}</td><td><b>${esc(r[1])}</b></td></tr>`).join("");
+const TACTICS=[
+ "Budget about 2 minutes per question. Flag anything over 3 minutes and move on; there's no penalty for guessing, so answer everything.",
+ "Case studies come as a separate section. Read the question first, then search the case for the requirement it points to (security, residency, cost).",
+ "When you can't review a section after leaving it, finish your flagged items there before you click Next.",
+ "Microsoft's tie-breakers: managed service over custom code, least privilege, keyless identity, least administrative effort, built-in over bespoke.",
+ "Underline the decisive phrase: 'without code', 'keyless', 'EU only', 'in real time', 'fixed layout', 'exact ID'. It usually eliminates two options.",
+ "Microsoft Learn is available during the exam with restricted browsing while the timer keeps running. Use it only to confirm a parameter or role name, never to learn a concept.",
+ "For code-completion items, identify the object first (project client vs OpenAI client vs search client), then the method. The wrong options often call a real method on the wrong object.",
+ "Both current and recently renamed names can appear. If an option uses an old name, check whether a newer equivalent is also offered.",
+ "Preview features can be tested when widely used. Don't eliminate an option just because the feature is in preview."
+];
+document.getElementById("tactics").innerHTML=TACTICS.map(t=>`<li>${esc(t)}</li>`).join("");
+</script>
+
+</body></html>
