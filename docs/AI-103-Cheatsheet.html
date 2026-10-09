@@ -272,6 +272,17 @@ const SECTIONS = [
   ["\"A prebuilt model\"","Not an access method","It is the kind of model, so it is never a complete answer on its own"]],
  tip:"<b>Worked question:</b> extract tables from JPEG/PNG/TIFF photos with the layout model, no training → <b>SDK + REST API + Studio</b>. Wrong: 'a prebuilt model'. Layout (<code>prebuilt-layout</code>) accepts images (JPEG, PNG, BMP, TIFF, HEIF) as well as PDF and Office files."},
 
+{id:"kmining",title:"AI Search knowledge mining: which structure",note:"Defined in or alongside the skillset/indexer.",
+ cols:["Structure","Purpose","Where it lives"],
+ rows:[
+  ["Search index","Full-text/vector queries by your app","Azure AI Search"],
+  ["Knowledge store","Keep enriched output for <b>downstream apps</b>, data science, Power BI","Azure Storage: <b>table</b>, <b>object (JSON)</b> and <b>file</b> projections; defined in the skillset"],
+  ["Enrichment cache","Re-run only changed documents (incremental enrichment), saves cost","Azure Storage; not for consumption"],
+  ["Skillset","Pipeline of skills (OCR, split, embed, custom)","Azure AI Search"],
+  ["Shaper skill","Builds the data shape that projections save","Inside the skillset"],
+  ["\"Searchable store\"","Not an Azure AI Search term (distractor)",""]],
+ tip:"<b>Worked question:</b> store the enriched output for downstream apps → <b>knowledge store</b>. Index = search · cache = incremental re-runs · knowledge store = reuse the enrichments elsewhere."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
