@@ -119,6 +119,15 @@ const SECTIONS = [
   ["Prove an image is AI-generated","C2PA content credentials"],
   ["Filtering slows streaming","Asynchronous filter mode (accept the trade-off)"]]},
 
+{id:"guardmap",title:"Guardrail controls × intervention points",note:"Match the missing point first, then the risk category.",
+ cols:["Intervention point","Applies to","Typical controls"],
+ rows:[
+  ["User input","Model and agent","Hate, sexual, violence, self-harm; Prompt Shields (user prompt attack)"],
+  ["Tool call","Agent only (preview)","Harm categories, PII, e.g. violence in data the agent sends to a tool"],
+  ["Tool response","Agent only (preview)","Harm categories, indirect (document) attack, e.g. violence in data returned by a tool"],
+  ["Output","Model and agent","Harm categories, protected material, groundedness"]],
+ tip:"<b>Worked question:</b> violence already blocked in user prompts and final responses, but not when Agent1 sends or receives tool data, and the model deployment's guardrail must not change → add <b>Violence controls</b> at <b>Tool call + Tool response</b> with <b>Annotate and block</b> to a <b>custom guardrail assigned to the agent</b>. Wrong: violence at User input/Output (already covered) · Protected material (a different risk, not violence). Action: <b>Annotate</b> only flags; <b>Annotate and block</b> stops it. An agent-level guardrail overrides the model's for that agent."},
+
 {id:"tools",title:"Agent tool picker",note:"",
  cols:["Need","Tool"],
  rows:[
