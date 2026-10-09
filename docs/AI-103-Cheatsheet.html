@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI-103 Cheatsheet</title>
+<style>
+:root{color-scheme:light;--bg:#f4f6f8;--card:#fff;--ink:#132030;--muted:#566476;--line:#d3dae2;--head:#e7ecf1;--accent:#0d7672;--hl:#fbf1da}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+h1{margin:0;font-size:1.8rem}
+.sub{color:var(--muted);margin:4px 0 16px}
+.bar{position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;display:grid;gap:8px;border-bottom:1px solid var(--line)}
+input[type=search]{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{font-size:.8rem;padding:3px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:#fff}
+.toc a:hover{border-color:var(--accent);color:var(--accent)}
+section{margin-top:28px}
+h2{font-size:1.2rem;margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+h2 small{font-weight:400;font-size:.8rem;color:var(--muted)}
+.note{margin:0 0 8px;color:var(--muted);font-size:.86rem}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{text-align:left;padding:7px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--head);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+tr.hit td{background:var(--hl)}
+tr.off,section.off{display:none}
+.tip{margin:8px 0 0;padding:6px 10px;background:var(--hl);border-left:3px solid #c98a0b;border-radius:0 4px 4px 0;font-size:.86rem}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;background:var(--head);padding:1px 4px;border-radius:3px}
+footer{margin-top:36px;color:var(--muted);font-size:.8rem}
+@media print{.bar{position:static}.toc{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>AI-103 Cheatsheet</h1>
+<p class="sub">Developing AI Apps and Agents on Azure · tables for fast revision · verify names against Microsoft Learn before the exam</p>
+<div class="bar">
+  <input type="search" id="q" placeholder="Filter every table, e.g. 429, batch, PII, MCP" aria-label="Filter rows">
+  <nav class="toc" id="toc" aria-label="Sections"></nav>
+</div>
+<main id="out"></main>
+<footer>To add content: append an object to <code>SECTIONS</code> in the script at the bottom of this file (id, title, note, cols, rows, optional tip). Print-friendly.</footer>
+</div>
+
+<script>
+/* ===== ADD NEW SECTIONS BELOW (or edit rows). Each section: {id,title,note,cols:[...],rows:[[...]],tip} ===== */
+const SECTIONS = [
+{id:"exam",title:"Exam at a glance",note:"120 min · 40–60 questions · pass 700/1000",
+ cols:["Domain","Weight","Focus"],
+ rows:[
+  ["Plan & manage","25–30%","Models, deployments, quota, RBAC, guardrails, monitoring, CI/CD"],
+  ["Generative AI & agents","30–35%","Foundry apps, RAG, tools, MCP, orchestration, evaluation"],
+  ["Computer vision","10–15%","Image/video generation, multimodal chat, Content Understanding"],
+  ["Text analysis","10–15%","Azure Language, translation, speech, voice agents"],
+  ["Information extraction","10–15%","AI Search, Document Intelligence, Content Understanding"]]},
+
+{id:"deploy",title:"Model deployment types",note:"Pick by data residency, traffic shape and cost model.",
+ cols:["Type","Billing","Where it processes","Use when","Watch out"],
+ rows:[
+  ["Standard","Pay per token","Single region (the resource's region)","Dev/test, low or spiky volume, strict single-region processing","Shared capacity; 429 at peaks; lower default quota"],
+  ["Global Standard","Pay per token","Any Azure region (data at rest stays in your geography)","Default choice: highest quota, best availability","Processing may leave your region"],
+  ["Data Zone Standard","Pay per token","Within the EU or US data zone","Residency needs plus more quota than one region","Zone only, not a single country"],
+  ["Global Provisioned","Reserved PTU (hourly/commit)","Any region","Steady high volume, predictable latency and throughput","Pay for capacity even when idle"],
+  ["Data Zone Provisioned","Reserved PTU","Within EU or US zone","PTU performance plus zone residency","Same idle-cost trade-off"],
+  ["Global Batch","Per token, ~50% cheaper","Any region, async","Large offline jobs, results within 24 h","Not interactive; separate batch quota"],
+  ["Data Zone Batch","Per token, ~50% cheaper","Within EU or US zone, async","Offline jobs with residency rules","Not interactive"]],
+ tip:"Regional <b>Provisioned</b> also exists (single-region PTU). Cheapest bulk = Batch · lowest steady latency = Provisioned · most quota = Global Standard · stay in EU/US = Data Zone."},
+
+{id:"deploycmp",title:"Deployment type quick chooser",note:"Scenario phrase → answer.",
+ cols:["If the question says…","Choose"],
+ rows:[
+  ["Predictable latency at constant high volume","Provisioned (Global or Data Zone)"],
+  ["Process must stay in EU/US, pay per token","Data Zone Standard"],
+  ["Cost-sensitive, no real-time need, within 24 h","Global Batch (Data Zone Batch if residency)"],
+  ["Highest default quota, residency not required","Global Standard"],
+  ["Must process in one specific region","Standard (regional)"],
+  ["Occasional HTTP 429","Backoff + retry, raise TPM, or move to PTU / spread load with APIM"]]},
+
+{id:"models",title:"Model choice and parameters",note:"",
+ cols:["Need","Pick / set","Notes"],
+ rows:[
+  ["Narrow, high-volume, cheap, fast","Small model (mini/nano, Phi)","Large models only for open-ended reasoning"],
+  ["Multistep reasoning, maths, planning","Reasoning model + reasoning effort","Don't tune temperature on reasoning models"],
+  ["Route each prompt to the cheapest capable model","Model router deployment","One endpoint, many models"],
+  ["Consistent, factual answers","Low temperature (0–0.2)","Change temperature or top_p, not both"],
+  ["Stop repeated phrases","Raise frequency_penalty","presence_penalty pushes toward new topics"],
+  ["Output must match a schema","Structured outputs: json_schema, strict:true","JSON mode only guarantees valid JSON"],
+  ["Style/format drift, very long prompts","Fine-tuning (SFT)","Teaches behaviour, not new facts"],
+  ["Facts change often","RAG","Re-index, don't retrain"],
+  ["Chosen vs rejected response pairs","DPO fine-tuning","SFT uses prompt + ideal response"]]},
+
+{id:"rbac",title:"Foundry RBAC",note:"Least privilege; keyless with managed identity.",
+ cols:["Role","Can do","Typical person"],
+ rows:[
+  ["Foundry User","Use project: build agents, run evals, call models","Developer"],
+  ["Foundry Project Manager","Manage a project, publish agents, grant Foundry User","Team lead"],
+  ["Foundry Account Owner","Create resources and deploy models (management plane)","Platform admin"],
+  ["Owner","Full control including role assignment","Subscription/RG owner"],
+  ["Search Index Data Reader","Query an index","App identity"],
+  ["Storage Blob Data Reader","Indexer reads Blob via the search service identity","Search service"]],
+ tip:"Keyless = <code>DefaultAzureCredential</code> + managed identity, with local (key) auth disabled. Key Vault still means a key."},
+
+{id:"guard",title:"Guardrails and safety",note:"Four intervention points: user input · tool call · tool response · output (tool points are agent-only, preview).",
+ cols:["Risk","Control"],
+ rows:[
+  ["Jailbreak typed by the user","Prompt Shields: user prompt attack"],
+  ["Hidden instructions in documents, emails, web pages, tool output","Prompt Shields: indirect (document) attack, spotlighting"],
+  ["PII leaking to an external tool","Guardrail control at the tool-call intervention point"],
+  ["Banned words or competitor names","Custom blocklist"],
+  ["Reproduces lyrics or licensed code","Protected material detection (text and code)"],
+  ["Facts not in the source","Groundedness detection / evaluator"],
+  ["Pre-release adversarial testing","AI Red Teaming Agent (PyRIT-based)"],
+  ["Human sign-off on a sensitive tool call","MCP <code>require_approval=\"always\"</code>"],
+  ["Restrict MCP tools","<code>allowed_tools</code> + least-privilege identity"],
+  ["Prove an image is AI-generated","C2PA content credentials"],
+  ["Filtering slows streaming","Asynchronous filter mode (accept the trade-off)"]]},
+
+{id:"tools",title:"Agent tool picker",note:"",
+ cols:["Need","Tool"],
+ rows:[
+  ["Answer from company docs with citations","Azure AI Search tool / Foundry IQ knowledge base"],
+  ["Many agents share SharePoint, Blob, OneLake, web knowledge","Foundry IQ (agentic retrieval)"],
+  ["Call a REST API with an OpenAPI spec","OpenAPI tool (service-side call)"],
+  ["Run your own code in your process","Function calling (you execute, return function_call_output)"],
+  ["Stats or charts from a CSV","Code Interpreter"],
+  ["Search uploaded PDFs, no index","File Search (vector store)"],
+  ["Current public web info","Web search / Grounding with Bing"],
+  ["Tools hosted elsewhere via a standard protocol","MCP tool"],
+  ["Agent-to-agent discovery and delegation","A2A (agent cards)"]],
+ tip:"MCP = agent-to-tool · A2A = agent-to-agent."},
+
+{id:"orch",title:"Orchestration patterns",note:"",
+ cols:["Pattern","Shape","Use when"],
+ rows:[
+  ["Sequential","A → B → C","Fixed pipeline: extract, validate, summarise"],
+  ["Concurrent","Fan-out, fan-in","Independent analyses, then merge"],
+  ["Handoff","Control transfers to a specialist","Triage then specialist talks to the user"],
+  ["Group chat","Shared conversation, managed turns","Debate or refine one output"],
+  ["Magentic","Manager plans, ledger of tasks","Open-ended, dynamic planning"],
+  ["Reflection","Generate, critique, revise (bounded)","Self-review for quality"]],
+ tip:"Rule-bound decisions go to deterministic code; use the LLM for the unstructured parts."},
+
+{id:"agentapi",title:"Agent API vocabulary (new vs classic)",note:"",
+ cols:["Classic","Now","Meaning"],
+ rows:[
+  ["Thread","Conversation","Server-side state"],
+  ["Run","Response","One model turn"],
+  ["Assistant","Agent (versioned, <code>create_version</code>)","Invoke with <code>agent_reference</code>"],
+  ["Chat Completions","Responses API","Chat Completions is stateless; Responses supports <code>previous_response_id</code>"]]},
+
+{id:"eval",title:"Evaluators",note:"",
+ cols:["Question","Evaluator"],
+ rows:[
+  ["Did the agent understand the request?","Intent Resolution"],
+  ["Did it follow instructions?","Task Adherence"],
+  ["Did it call the right tools with right args?","Tool Call Accuracy"],
+  ["Did it finish the task?","Task Completion"],
+  ["Is the RAG answer supported by context?","Groundedness"],
+  ["Was retrieval relevant?","Retrieval / Relevance"],
+  ["Compare with a reference answer","Similarity, F1, BLEU, ROUGE, METEOR (need ground truth)"],
+  ["Quality drifting in production","Continuous evaluation on sampled traffic + alerts"]]},
+
+{id:"ops",title:"Operate and govern",note:"",
+ cols:["Need","Answer"],
+ rows:[
+  ["Per-app token limits, chargeback","APIM AI gateway: token-limit, emit-token-metric"],
+  ["Traces of model and agent calls","Application Insights + OpenTelemetry"],
+  ["Agents data in your own resources","Agent Service standard setup (own Cosmos DB, Storage, AI Search)"],
+  ["No public internet path","Private endpoints, public network access off"],
+  ["Repeatable releases","Bicep/Terraform + azd + GitHub Actions (OIDC), evaluation as a gate"],
+  ["Debug a skillset on a real document","AI Search Debug Sessions + indexer execution history"]]},
+
+{id:"search",title:"Azure AI Search",note:"",
+ cols:["Need","Feature"],
+ rows:[
+  ["Best relevance","Hybrid (BM25 + vector, RRF) + semantic ranker"],
+  ["Exact codes or IDs missed","Keyword or hybrid"],
+  ["Embed and vectorise automatically","Integrated vectorization (Text Split + embedding skill + vectorizer)"],
+  ["Scanned PDFs / images","Image extraction + OCR + Merge, or Document Layout skill"],
+  ["Headings and tables kept for chunking","Document Layout skill"],
+  ["Custom enrichment","Custom Web API skill (<code>values[]</code> with recordId, data)"],
+  ["Keep enriched output elsewhere","Knowledge store (projections, Shaper skill)"],
+  ["Re-run only changes","Incremental enrichment cache"],
+  ["Users see only allowed docs","Security trimming (ACL fields + filters)"],
+  ["Cheaper vector index","Quantization, fewer dimensions, stored=false"],
+  ["Multi-part questions across sources","Agentic retrieval (knowledge base)"]]},
+
+{id:"vision",title:"Vision and generation",note:"",
+ cols:["Need","Answer"],
+ rows:[
+  ["Image from text","Image generation model (images API)"],
+  ["Change part of a photo","Image edit with a mask (inpainting)"],
+  ["Video from text or image","Sora via videos API: create job → poll → download"],
+  ["Describe or question an image","Multimodal chat model, image input (detail: high)"],
+  ["Fields from images, audio, video","Content Understanding custom analyzer"],
+  ["Video chapters, scenes","Content Understanding video analyzer (segments)"],
+  ["Text inside an image overrides instructions","Treat as untrusted: indirect attack detection, spotlighting"]]},
+
+{id:"lang",title:"Language, translation, speech",note:"",
+ cols:["Need","Answer"],
+ rows:[
+  ["Find and redact PII","Azure Language PII detection"],
+  ["Sentiment per aspect","Sentiment with opinion mining"],
+  ["Intents and entities","Conversational Language Understanding (CLU)"],
+  ["FAQ answers from documents","Custom question answering"],
+  ["Own categories / own entities","Custom text classification / custom NER"],
+  ["Medical text","Text Analytics for health"],
+  ["Translate files keeping layout","Document Translation (batch, Blob)"],
+  ["Consistent domain terms","Custom Translator or glossary"],
+  ["Hours of audio, overnight","Batch transcription"],
+  ["One file, fast, synchronous","Fast transcription API"],
+  ["Live captions","Real-time speech to text"],
+  ["Who said what","Speaker diarization"],
+  ["Product names misheard","Phrase list, then Custom Speech"],
+  ["Pace, pitch, pauses","SSML (prosody, break, say-as, phoneme)"],
+  ["Natural voice agent with interruptions","Voice Live API"],
+  ["Spoken language A in, language B out","Speech translation"]]},
+
+{id:"extract",title:"Document Intelligence vs Content Understanding",note:"",
+ cols:["Need","Choose"],
+ rows:[
+  ["Invoices, receipts, IDs, no training","Document Intelligence prebuilt"],
+  ["Fixed layout, few samples","Custom template model"],
+  ["Varied layouts","Custom neural model"],
+  ["Route mixed document types","Custom classifier / composed model"],
+  ["Checkbox state","Selection marks (layout model)"],
+  ["Own schema, classify/generate fields, grounded markdown for agents","Content Understanding analyzer"]],
+ tip:"Document Intelligence = deterministic OCR/layout · Content Understanding = generative, schema-based, multimodal."},
+
+{id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
+ cols:["Old","Current"],
+ rows:[
+  ["Azure AI User role","Foundry User"],
+  ["LUIS","Conversational Language Understanding"],
+  ["QnA Maker","Custom question answering"],
+  ["Threads / runs","Conversations / responses"]]}
+];
+/* ===== END SECTIONS ===== */
+
+const out=document.getElementById('out'),toc=document.getElementById('toc');
+const e=s=>String(s).replace(/&(?!(amp|lt|gt|quot|#\d+);)/g,'&amp;');
+out.innerHTML=SECTIONS.map(s=>`<section id="${s.id}"><h2>${s.title}${s.note?`<small>${s.note}</small>`:''}</h2>
+<div class="tw"><table><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${s.tip?`<div class="tip">${s.tip}</div>`:''}</section>`).join('');
+toc.innerHTML=SECTIONS.map(s=>`<a href="#${s.id}">${s.title}</a>`).join('');
+document.getElementById('q').addEventListener('input',ev=>{
+  const q=ev.target.value.trim().toLowerCase();
+  document.querySelectorAll('section').forEach(sec=>{
+    let any=false;
+    sec.querySelectorAll('tbody tr').forEach(tr=>{
+      const m=!q||tr.textContent.toLowerCase().includes(q);
+      tr.classList.toggle('off',!m);tr.classList.toggle('hit',!!q&&m);if(m)any=true;});
+    sec.classList.toggle('off',!any);
+  });
+});
+</script>
+</body>
+</html>

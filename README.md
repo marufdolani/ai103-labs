@@ -58,7 +58,7 @@ python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
 
 The labs follow the exam domains, but they're grouped below into **scenario tracks** that build on each other. Total hands-on time is about **23 hours**.
 
-For a 48-hour exam cram alongside the labs, download [`docs/AI-103-Fast-Track.html`](docs/AI-103-Fast-Track.html) (study plan, reflex map, scenario drills, code patterns, exam traps) and open it in a browser.
+For a 48-hour exam cram alongside the labs, download [`docs/AI-103-Fast-Track.html`](docs/AI-103-Fast-Track.html) (study plan, reflex map, scenario drills, code patterns, exam traps) and open it in a browser. A one-page table [cheatsheet](docs/AI-103-Cheatsheet.html) is alongside it.
 
 | Track | Labs | Scenario thread | Exam weight |
 |---|---|---|---|
