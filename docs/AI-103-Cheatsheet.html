@@ -327,6 +327,16 @@ const SECTIONS = [
   ["<code>remix_video_id</code>","Existing <b>completed video</b> to modify","Change one thing (e.g. product colour) while keeping structure, motion, framing, timing"]],
  tip:"<b>Worked question:</b> new video that changes the product colour while keeping approved camera motion, framing and timing from <code>video_123</code> → <b><code>remix_video_id</code> = video_123</b>. Wrong: size/seconds (settings only) · input_reference (anchors on an image, not a video). Video generation with Sora 2 is a preview feature."},
 
+{id:"mmpi",title:"Indirect prompt injection via images (OCR text)",note:"Screen extracted text BEFORE the model is invoked.",
+ cols:["Step / need","Control or action","Why"],
+ rows:[
+  ["Detect hidden instructions in OCR / document text","<b>Prompt Shields</b> (document/indirect attack)","Built for injection; the other detectors target different risks"],
+  ["High-risk upload detected","<b>Reject / block</b> before the model call","Risky text never reaches the prompt"],
+  ["Uncertain upload","<b>Route to human review, keep the original file</b>","Retain originals that need a human decision; do not discard"],
+  ["Safe upload","Pass OCR text to the model (delimit/spotlight as untrusted)","Defence in depth, not a replacement for screening"],
+  ["Not the answer","Groundedness · image moderation · protected material · output-only validation · OCR retries · removing delimiters","None screens injected input before the model"]],
+ tip:"<b>Worked question:</b> agent reads screenshot text via OCR; webpage text tries to change its instructions → detection control = <b>Prompt Shields</b>; handling = <b>reject detected high-risk uploads</b> and <b>triage uncertain ones to human review preserving the original file</b>. Direct attack = user prompt · indirect attack = content the model reads (docs, web, OCR)."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
