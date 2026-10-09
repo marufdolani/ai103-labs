@@ -348,6 +348,18 @@ const SECTIONS = [
   ["Custom Translator training data","Parallel documents (training, tuning, testing sets)","Project, then train, review BLEU, then publish"]],
  tip:"<b>Worked question:</b> scale for the BLEU score of a custom translation model → <b>between 0 and 100</b>. Distractors: 0-1 · low/medium/high. Note: BLEU in <i>Foundry evaluators</i> (text similarity) is reported 0-1; for Custom Translator the answer is 0-100."},
 
+{id:"speechmcp",title:"Azure Speech MCP server in an agent",note:"Least-privilege storage access, container-scoped.",
+ cols:["Setting","Value","Why"],
+ rows:[
+  ["Resource the MCP server connects to","<b>Foundry resource</b> (Foundry1)","MCP server needs the Foundry resource value and endpoint"],
+  ["Storage access for audio","<b>Container SAS URL</b>, read/write, scoped to Container1","Read uploaded audio and write translated audio, nothing else"],
+  ["Agent name / deployment name","Not the connection value","Identify the agent or model, not the access"],
+  ["Container name alone","Not sufficient","Gives no credential"],
+  ["File-scoped read-only SAS","Too narrow","Cannot write the translated audio"],
+  ["Foundry endpoint URL alone","Not sufficient","Not a storage credential"],
+  ["Storage account connection string","Too broad","Account-wide key; violates least privilege"]],
+ tip:"<b>Worked question:</b> translate uploaded meeting audio and write results to Container1, storage access limited to Container1 → <b>Foundry1</b> + <b>container SAS URL with read/write</b>. Least privilege = container scope, not account key or connection string. Speech translation is in Foundry Tools; the MCP server is preview."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
