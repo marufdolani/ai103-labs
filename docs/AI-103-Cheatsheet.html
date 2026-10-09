@@ -294,6 +294,16 @@ const SECTIONS = [
   ["Azure Machine Learning","Custom models","Needs your own model development and training (highest effort)"]],
  tip:"<b>Worked question:</b> extract information from documents, images, video <i>and</i> audio with minimal development effort → <b>Content Understanding</b>. Document Intelligence = documents only · Language = text only · Azure ML = custom training, not minimal effort."},
 
+{id:"indexing",title:"AI Search indexing pipeline: stage order",note:"Indexer stages, in order.",
+ cols:["#","Stage","What happens"],
+ rows:[
+  ["1","<b>Document cracking</b>","Open files, extract text, images and metadata (the first stage)"],
+  ["2","Field mappings","Map source fields to index fields (before enrichment)"],
+  ["3","Skillset execution","AI enrichment skills (OCR, split, entities, embeddings); built on the enriched document tree"],
+  ["4","Output field mappings","Map enriched nodes to index fields (or knowledge store projections)"],
+  ["5","Push to index","Write the results to the search index"]],
+ tip:"<b>Worked question:</b> first stage of indexing → <b>document cracking</b>. Memory aid: <b>C</b>rack → <b>F</b>ield map → <b>S</b>killset → <b>O</b>utput map → <b>I</b>ndex. Indexer = <b>pull</b> model; pushing documents with the SDK/REST API skips cracking and skillsets."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
