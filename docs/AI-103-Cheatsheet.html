@@ -283,6 +283,17 @@ const SECTIONS = [
   ["\"Searchable store\"","Not an Azure AI Search term (distractor)",""]],
  tip:"<b>Worked question:</b> store the enriched output for downstream apps → <b>knowledge store</b>. Index = search · cache = incremental re-runs · knowledge store = reuse the enrichments elsewhere."},
 
+{id:"svcpick",title:"Which Foundry Tools service for which content",note:"Match the content type, then the effort level.",
+ cols:["Service","Content","Choose when"],
+ rows:[
+  ["Content Understanding","<b>Documents, images, video, audio</b> (multimodal)","One service, consistent APIs, minimal dev effort, structured/markdown output"],
+  ["Document Intelligence","Documents and forms only","Deterministic OCR, layout, prebuilt/custom field models"],
+  ["Azure Language","Text only","Sentiment, entities, PII, CLU, summarisation"],
+  ["Azure Speech","Audio/voice only","Transcription, synthesis, translation, Voice Live"],
+  ["Azure Vision (Image Analysis)","Images only","Captions, tags, OCR, detection"],
+  ["Azure Machine Learning","Custom models","Needs your own model development and training (highest effort)"]],
+ tip:"<b>Worked question:</b> extract information from documents, images, video <i>and</i> audio with minimal development effort → <b>Content Understanding</b>. Document Intelligence = documents only · Language = text only · Azure ML = custom training, not minimal effort."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
