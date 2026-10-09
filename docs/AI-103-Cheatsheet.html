@@ -231,6 +231,17 @@ const SECTIONS = [
   ["Own schema, classify/generate fields, grounded markdown for agents","Content Understanding analyzer"]],
  tip:"Document Intelligence = deterministic OCR/layout · Content Understanding = generative, schema-based, multimodal."},
 
+{id:"cli",title:"Azure CLI for Foundry / Cognitive Services",note:"Resource group and name are both required to target one account.",
+ cols:["Task","Command","Notes"],
+ rows:[
+  ["Get endpoint (and other properties)","<code>az cognitiveservices account show --name myresource --resource-group myrg</code>","Needs <b>--name AND --resource-group</b>. Endpoint is in <code>properties.endpoint</code>"],
+  ["Get just the endpoint","<code>az cognitiveservices account show -n myresource -g myrg --query properties.endpoint -o tsv</code>","JMESPath <code>--query</code>"],
+  ["List keys","<code>az cognitiveservices account keys list --name myresource --resource-group myrg</code>","Exam prefers keyless (Entra ID); keys are the fallback"],
+  ["List accounts in a group","<code>az cognitiveservices account list --resource-group myrg</code>",""],
+  ["Create an account","<code>az cognitiveservices account create --name myresource --resource-group myrg --kind AIServices --sku S0 --location eastus2</code>","<code>--kind</code> picks the service type"],
+  ["Deploy a model","<code>az cognitiveservices account deployment create --name myresource --resource-group myrg --deployment-name d1 --model-name gpt-5.4-mini --model-version ... --model-format OpenAI --sku-name GlobalStandard --sku-capacity 10</code>","<code>--sku-name</code> is the deployment type"]],
+ tip:"Exam trap: <code>az cognitiveservices account show</code> alone, or with only <code>--name</code> or only <code>--resource-group</code>, is invalid. Both are required."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
