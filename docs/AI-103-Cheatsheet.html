@@ -251,6 +251,18 @@ const SECTIONS = [
   ["Deploy a model","<code>az cognitiveservices account deployment create --name myresource --resource-group myrg --deployment-name d1 --model-name gpt-5.4-mini --model-version ... --model-format OpenAI --sku-name GlobalStandard --sku-capacity 10</code>","<code>--sku-name</code> is the deployment type"]],
  tip:"Exam trap: <code>az cognitiveservices account show</code> alone, or with only <code>--name</code> or only <code>--resource-group</code>, is invalid. Both are required."},
 
+{id:"docintel",title:"Document Intelligence Studio: which model",note:"Pick the least-effort model that returns the fields you need.",
+ cols:["Model","Returns","Training","Use when"],
+ rows:[
+  ["Read","Printed/handwritten text, languages","No","Text only"],
+  ["Layout","Text, tables, selection marks, structure (markdown)","No","Tables and checkboxes plus structure; no key-value semantics"],
+  ["General document","<b>Key-value pairs</b>, entities, tables, selection marks, text","No","Any document, no custom training: key-value + selection marks + tables"],
+  ["Prebuilt (invoice, receipt, ID, business card, tax, …)","Typed fields for that document type","No","Known document type; too narrow for general extraction"],
+  ["Custom template","Your labelled fields","Yes (few samples)","Fixed layout"],
+  ["Custom neural","Your labelled fields","Yes","Varied layouts"],
+  ["Custom classifier / composed","Document type routing","Yes","Mixed document types"]],
+ tip:"<b>Worked question:</b> extract key-value pairs, selection marks and tables in Document Intelligence Studio → <b>general document model</b>. Wrong: custom (needs training) · layout (no key-value) · receipt (receipt fields only). Note: newer docs may position Layout/Content Understanding for this; follow the exam wording."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
