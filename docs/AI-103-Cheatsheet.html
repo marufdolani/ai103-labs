@@ -317,6 +317,16 @@ const SECTIONS = [
   ["Specific banned terms","Blocklists","Text only"]],
  tip:"<b>Worked question:</b> built-in image moderation already passes; new company-specific visual rules (logo placement, restricted areas); reviewer-approved compliant/noncompliant examples; no custom vision model → <b>Custom categories (rapid)</b>. Image moderation = general harm only · Prompt Shields = attacks · Standard = heavier training path."},
 
+{id:"sora",title:"Sora 2 video parameters",note:"Videos API: create job → poll status → download.",
+ cols:["Parameter","Controls","Use when"],
+ rows:[
+  ["<code>prompt</code>","What to generate","Always"],
+  ["<code>size</code>","Output resolution","Pick a resolution (does not preserve an existing video)"],
+  ["<code>seconds</code>","Duration","Pick a length (does not preserve an existing video)"],
+  ["<code>input_reference</code>","Starting <b>image</b> that anchors the first frame","Image-to-video, not remixing a video"],
+  ["<code>remix_video_id</code>","Existing <b>completed video</b> to modify","Change one thing (e.g. product colour) while keeping structure, motion, framing, timing"]],
+ tip:"<b>Worked question:</b> new video that changes the product colour while keeping approved camera motion, framing and timing from <code>video_123</code> → <b><code>remix_video_id</code> = video_123</b>. Wrong: size/seconds (settings only) · input_reference (anchors on an image, not a video). Video generation with Sora 2 is a preview feature."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
