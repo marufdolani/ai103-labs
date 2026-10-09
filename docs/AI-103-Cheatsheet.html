@@ -337,6 +337,17 @@ const SECTIONS = [
   ["Not the answer","Groundedness · image moderation · protected material · output-only validation · OCR retries · removing delimiters","None screens injected input before the model"]],
  tip:"<b>Worked question:</b> agent reads screenshot text via OCR; webpage text tries to change its instructions → detection control = <b>Prompt Shields</b>; handling = <b>reject detected high-risk uploads</b> and <b>triage uncertain ones to human review preserving the original file</b>. Direct attack = user prompt · indirect attack = content the model reads (docs, web, OCR)."},
 
+{id:"bleu",title:"Custom Translator and BLEU score",note:"Evaluating a custom translation model.",
+ cols:["Item","Value","Notes"],
+ rows:[
+  ["BLEU scale","<b>0 to 100</b>","Not 0-1, not low/medium/high"],
+  ["0","Nothing matches the reference","Lowest quality"],
+  ["100","Identical to the reference","Perfect; not required in practice"],
+  ["40-60","High-quality translation","Good target range"],
+  ["What BLEU compares","Machine output vs human reference translation","Higher = closer match"],
+  ["Custom Translator training data","Parallel documents (training, tuning, testing sets)","Project, then train, review BLEU, then publish"]],
+ tip:"<b>Worked question:</b> scale for the BLEU score of a custom translation model → <b>between 0 and 100</b>. Distractors: 0-1 · low/medium/high. Note: BLEU in <i>Foundry evaluators</i> (text similarity) is reported 0-1; for Custom Translator the answer is 0-100."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
