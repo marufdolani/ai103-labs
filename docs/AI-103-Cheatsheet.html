@@ -304,6 +304,19 @@ const SECTIONS = [
   ["5","Push to index","Write the results to the search index"]],
  tip:"<b>Worked question:</b> first stage of indexing → <b>document cracking</b>. Memory aid: <b>C</b>rack → <b>F</b>ield map → <b>S</b>killset → <b>O</b>utput map → <b>I</b>ndex. Indexer = <b>pull</b> model; pushing documents with the SDK/REST API skips cracking and skillsets."},
 
+{id:"csafety",title:"Azure AI Content Safety: which feature",note:"Built-in categories vs your own policy.",
+ cols:["Need","Feature","Notes"],
+ rows:[
+  ["General harm in images (hate, sexual, violence, self-harm)","Image moderation","Built-in categories with severity levels"],
+  ["General harm in text","Text moderation","Same four categories, severity 0-7"],
+  ["Company-specific visual/text policy (logo placement, restricted areas), few approved examples, no custom model to build or host","<b>Custom categories (rapid)</b>","Preview. Define a category from example images/text; fast, for emerging or one-off patterns"],
+  ["Own category trained on a larger labelled dataset","Custom categories (standard)","Training step; takes longer"],
+  ["Jailbreak or injected instructions","Prompt Shields","Direct and indirect attacks; not a harm-category tool"],
+  ["Ungrounded answers","Groundedness detection",""],
+  ["Copyrighted text or code","Protected material detection",""],
+  ["Specific banned terms","Blocklists","Text only"]],
+ tip:"<b>Worked question:</b> built-in image moderation already passes; new company-specific visual rules (logo placement, restricted areas); reviewer-approved compliant/noncompliant examples; no custom vision model → <b>Custom categories (rapid)</b>. Image moderation = general harm only · Prompt Shields = attacks · Standard = heavier training path."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
