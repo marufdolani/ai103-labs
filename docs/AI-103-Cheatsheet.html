@@ -263,6 +263,15 @@ const SECTIONS = [
   ["Custom classifier / composed","Document type routing","Yes","Mixed document types"]],
  tip:"<b>Worked question:</b> extract key-value pairs, selection marks and tables in Document Intelligence Studio → <b>general document model</b>. Wrong: custom (needs training) · layout (no key-value) · receipt (receipt fields only). Note: newer docs may position Layout/Content Understanding for this; follow the exam wording."},
 
+{id:"diaccess",title:"Document Intelligence: ways to call a model",note:"Access methods, not models. Prebuilt models need no training.",
+ cols:["Access method","Type","Notes"],
+ rows:[
+  ["Client library SDK (Python, .NET, Java, JS)","Code","<code>begin_analyze_document(\"prebuilt-layout\", ...)</code>"],
+  ["REST API","Code","POST <code>.../documentModels/prebuilt-layout:analyze</code>, then poll the result"],
+  ["Document Intelligence Studio","No-code UI","Upload a file, run the model interactively"],
+  ["\"A prebuilt model\"","Not an access method","It is the kind of model, so it is never a complete answer on its own"]],
+ tip:"<b>Worked question:</b> extract tables from JPEG/PNG/TIFF photos with the layout model, no training → <b>SDK + REST API + Studio</b>. Wrong: 'a prebuilt model'. Layout (<code>prebuilt-layout</code>) accepts images (JPEG, PNG, BMP, TIFF, HEIF) as well as PDF and Office files."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
