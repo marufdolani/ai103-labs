@@ -360,6 +360,17 @@ const SECTIONS = [
   ["Storage account connection string","Too broad","Account-wide key; violates least privilege"]],
  tip:"<b>Worked question:</b> translate uploaded meeting audio and write results to Container1, storage access limited to Container1 → <b>Foundry1</b> + <b>container SAS URL with read/write</b>. Least privilege = container scope, not account key or connection string. Speech translation is in Foundry Tools; the MCP server is preview."},
 
+{id:"genparams",title:"Generation parameters: consistency vs length",note:"Pick the parameter that matches the requirement.",
+ cols:["Parameter","Effect","Use for"],
+ rows:[
+  ["<b>Temperature</b>","Randomness of token choice (lower = more deterministic)","<b>Stable labels</b>: set low (0-0.2)"],
+  ["Top P","Nucleus sampling cutoff by probability mass","Alternative to temperature; adjust one, not both"],
+  ["<b>Max Tokens</b>","Hard cap on response length","<b>Explanations that fit a field</b>: cap output tokens"],
+  ["Stop Sequences","Text that ends generation when produced","Stop at a delimiter; not a length budget on its own"],
+  ["Frequency Penalty","Reduces repeats of frequent tokens","Repetition, not label stability"],
+  ["Presence Penalty","Encourages new topics","Topic variety, not label stability"]],
+ tip:"<b>Worked question:</b> stable product area labels → <b>Temperature</b> (low). Explanations that fit the ticket field → <b>Max Tokens</b>. Max Tokens truncates, so pair with a prompt asking for brevity. Penalties don't stabilise classification."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
