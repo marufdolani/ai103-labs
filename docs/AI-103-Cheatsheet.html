@@ -421,6 +421,15 @@ const SECTIONS = [
   ["<code>response_format</code>","URL or base64 output","Image returned as a link or data"]],
  tip:"<b>Worked question:</b> what does <code>size</code> indicate → <b>pixel resolution</b>. The count of images is <code>n</code>. Lesson: map each parameter to its meaning, and watch for distractors that swap units (bytes/KB) or counts."},
 
+{id:"kbchat",title:"Improve a chatbot over an internal knowledge base",note:"Retrieve the right content, then interpret it.",
+ cols:["Action","Verdict","Why"],
+ rows:[
+  ["Index the knowledge base with Azure AI Search","<b>Correct</b>","Searchable index for retrieval (RAG) over company content"],
+  ["Integrate the Embeddings API","<b>Correct</b>","Semantic (vector) matching of queries and documents"],
+  ["Train a custom language model","Wrong","Unnecessary; pre-trained chat models handle this with retrieved context"],
+  ["Use AI Vision for document analysis","Wrong","Built for images; the knowledge base is text documents"]],
+ tip:"<b>Worked question:</b> improve retrieval and processing of internal knowledge → <b>index with AI Search</b> + <b>Embeddings API</b> (RAG). Default answer for knowledge-base chatbots: retrieve, then ground the model. Fine-tuning and vision are distractors."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
