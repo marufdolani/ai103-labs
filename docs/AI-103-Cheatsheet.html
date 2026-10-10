@@ -430,6 +430,17 @@ const SECTIONS = [
   ["Use AI Vision for document analysis","Wrong","Built for images; the knowledge base is text documents"]],
  tip:"<b>Worked question:</b> improve retrieval and processing of internal knowledge → <b>index with AI Search</b> + <b>Embeddings API</b> (RAG). Default answer for knowledge-base chatbots: retrieve, then ground the model. Fine-tuning and vision are distractors."},
 
+{id:"dalleheader",title:"Azure OpenAI REST call: body vs header",note:"Image generation request (DALL-E 3). Per the Learn reference, the prompt is the body property you must send.",
+ cols:["Item","Where it goes","Notes"],
+ rows:[
+  ["<code>prompt</code>","<b>Request body</b>","Only required body property for image generation"],
+  ["<code>n</code>, <code>size</code>, <code>quality</code>, <code>style</code>","Request body (optional)","Tune the output; not required"],
+  ["API version (<code>api-version</code>)","Query string / header","Not a body property"],
+  ["Resource name","URL (endpoint host)","Not a body property"],
+  ["Deployment ID","URL path (<code>/deployments/{id}/images/generations</code>)","Not a body property"],
+  ["<code>Authorization</code> / <code>api-key</code>","Request header","Keyless with Entra ID: bearer token"]],
+ tip:"<b>Worked question:</b> HTTP body property needed for DALL-E 3 generation → <b>the prompt</b>. Deployment, resource and API version are in the URL or query string; auth is in a header."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
