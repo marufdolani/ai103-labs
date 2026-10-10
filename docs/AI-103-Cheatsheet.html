@@ -487,6 +487,15 @@ const SECTIONS = [
   ["Azure Document Intelligence in Foundry Tools","Wrong","Built for documents, not photos of signs"]],
  tip:"<b>Worked question:</b> read text from a photo of a street sign → <b>Azure Vision in Foundry Tools</b> (OCR). Pattern: text in images = Vision OCR; text in documents = Document Intelligence; custom objects = Custom Vision; faces = Face."},
 
+{id:"openairbac",title:"Managed identity access to one Azure OpenAI resource",note:"Keyless inference, least privilege, single resource scope.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Cognitive Services OpenAI User at the OpenAI1 resource scope","<b>Correct</b>","Allows inference calls; cannot manage deployments or keys; scoped to OpenAI1 only"],
+  ["Cognitive Services OpenAI Contributor at the OpenAI1 resource scope","Wrong","Can manage deployments and resource configuration; too much access"],
+  ["Cognitive Services Contributor at the OpenAI1 resource scope","Wrong","Full management including keys; too broad"],
+  ["Cognitive Services OpenAI User at the resource group scope","Wrong","Reaches OpenAI2 too; violates limit to OpenAI1 only"]],
+ tip:"<b>Worked question:</b> app calls inference only, no deployment or key management, one resource only → <b>Cognitive Services OpenAI User</b> at the <b>OpenAI1 resource scope</b>. Pattern: inference = OpenAI User; manage deployments = OpenAI Contributor; narrowest scope wins."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
