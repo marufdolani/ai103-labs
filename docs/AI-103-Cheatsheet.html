@@ -441,6 +441,16 @@ const SECTIONS = [
   ["<code>Authorization</code> / <code>api-key</code>","Request header","Keyless with Entra ID: bearer token"]],
  tip:"<b>Worked question:</b> HTTP body property needed for DALL-E 3 generation → <b>the prompt</b>. Deployment, resource and API version are in the URL or query string; auth is in a header."},
 
+{id:"agentdef",title:"Agent definition: enforce inputs, tool binding and output",note:"Schema and tool arguments in the definition, not only in the prompt.",
+ cols:["Requirement","Definition element","Why"],
+ rows:[
+  ["Customer identifier required on each call, passed at run time","<b>Required structured input</b> bound to the OpenAPI tool argument","Enforced by the schema; the model must supply it"],
+  ["Agent response matches the JSON schema","<b>Structured output</b> with the required JSON schema","Guarantees schema-conformant output for downstream workflows"],
+  ["Ask for the identifier and reply in JSON (instruction only)","Wrong alone","Instructions are advisory; use schemas to enforce"],
+  ["Tool-choice setting that forces a call","Wrong for this requirement","Does not bind the identifier to the tool argument"],
+  ["OpenAPI authentication with a project connection","Wrong for this requirement","Auth, not the input or output contract"]],
+ tip:"<b>Worked question:</b> two definitions for a tenant-specific identifier and strict JSON output → <b>C: required structured input bound to the OpenAPI argument</b> + <b>D: structured output with the JSON schema</b>. Rule: prompt instructions guide, schemas and bindings enforce."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
