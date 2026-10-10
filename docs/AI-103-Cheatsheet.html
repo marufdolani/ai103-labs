@@ -411,6 +411,16 @@ const SECTIONS = [
   ["Responses API without the agent, asking the model for audio","Wrong","Bypasses the agent and its connected tools"]],
  tip:"<b>Worked question:</b> an agent connected to the Speech MCP server must do text-to-speech for <code>reply_text</code> → <b>Responses API + agent_reference to Agent1</b>. Rule: when a question says 'the configured agent handles it', call the agent, not the tool or the model."},
 
+{id:"dalle",title:"Image generation REST parameters (DALL-E)",note:"Core request body fields.",
+ cols:["Parameter","Meaning","Notes"],
+ rows:[
+  ["<code>prompt</code>","Text description of the image","Required"],
+  ["<code>n</code>","<b>Number of images</b> to return","Count of responses, not bytes or pixels"],
+  ["<code>size</code>","<b>Pixel resolution</b> of the image, e.g. 1024x1024","Width x height; not a file size in bytes or KB"],
+  ["<code>quality</code> / <code>style</code>","Detail level and visual style","DALL-E 3 options"],
+  ["<code>response_format</code>","URL or base64 output","Image returned as a link or data"]],
+ tip:"<b>Worked question:</b> what does <code>size</code> indicate → <b>pixel resolution</b>. The count of images is <code>n</code>. Lesson: map each parameter to its meaning, and watch for distractors that swap units (bytes/KB) or counts."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
