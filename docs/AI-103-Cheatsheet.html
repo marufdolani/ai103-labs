@@ -460,6 +460,15 @@ const SECTIONS = [
   ["Microsoft Foundry GPT model alone","Wrong","Reasons over data you supply; cannot analyse the shelf images unaided"]],
  tip:"<b>Worked question:</b> analyse retail shelf images for placement and stock levels → <b>Azure Content Understanding in Foundry Tools</b>. Pattern: structured extraction from images = Content Understanding; bounding boxes only = Vision prebuilt; custom classes = Custom Vision."},
 
+{id:"docextract",title:"Knowledge mining: extract content from files in the enrichment pipeline",note:"Built-in skills for Azure AI Search enrichment.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Microsoft.Skills.Util.DocumentExtractionSkill","<b>Correct</b>","Extracts content from a file (e.g. blob) inside the enrichment pipeline"],
+  ["Microsoft.Skills.Text.KeyPhraseExtractionSkill","Wrong","Analyses text that already exists; does not extract content from files"],
+  ["Microsoft.Skills.Text.SplitSkill","Wrong","Splits text into chunks; does not read the file"],
+  ["Microsoft.Skills.Text.V3.EntityRecognitionSkill","Wrong","Recognises entities in text that is already extracted"]],
+ tip:"<b>Worked question:</b> extract content from a file inside the enrichment pipeline → <b>Microsoft.Skills.Util.DocumentExtractionSkill</b>. Pattern: get the content out first (DocumentExtractionSkill), then enrich it (text skills)."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
