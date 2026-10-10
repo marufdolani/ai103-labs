@@ -496,6 +496,18 @@ const SECTIONS = [
   ["Cognitive Services OpenAI User at the resource group scope","Wrong","Reaches OpenAI2 too; violates limit to OpenAI1 only"]],
  tip:"<b>Worked question:</b> app calls inference only, no deployment or key management, one resource only → <b>Cognitive Services OpenAI User</b> at the <b>OpenAI1 resource scope</b>. Pattern: inference = OpenAI User; manage deployments = OpenAI Contributor; narrowest scope wins."},
 
+{id:"ragdashboard",title:"RAG retrieval pipeline: monitoring dashboard signals",note:"Match each signal to the dashboard section it measures.",
+ cols:["Signal","Section","Verdict","Why"],
+ rows:[
+  ["Validation failure rate over time","Data ingestion quality","<b>Correct</b>","Measures how many ingested chunks or files fail validation, trended over time"],
+  ["Retrieval evaluation score on a labeled query set","Relevance performance","<b>Correct</b>","Measures how relevant retrieved results are against labelled answers"],
+  ["Pipeline update success status","Data ingestion quality","Supporting only","Shows whether a run finished, not how good the ingested data is"],
+  ["Chunk overlap token count","Either","Wrong","Chunking configuration, not a quality outcome"],
+  ["Embedding vector dimension count","Either","Wrong","Fixed model property; does not change with quality"],
+  ["Source availability by index","Either","Wrong","Measures uptime, not ingestion or relevance quality"],
+  ["Routing classifier confidence score","Either","Wrong","Belongs to a routing component, not this pipeline"]],
+ tip:"<b>Worked question:</b> dashboard tracks ingestion quality and relevance performance → <b>Validation failure rate over time</b> and <b>Retrieval evaluation score on a labeled query set</b>. Pattern: quality of data = validation metrics; quality of answers = labelled evaluation metrics; config and uptime are not quality signals."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
