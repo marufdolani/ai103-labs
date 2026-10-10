@@ -382,6 +382,15 @@ const SECTIONS = [
   ["Company-specific visual rules","Custom categories (rapid)","Preview; defined from examples"]],
  tip:"<b>Worked question:</b> classify prompt, image and OCR text before an image-generation deployment → <b>Moderate multimodal content</b>. Distractors: Groundedness (answer support) · Prompt Shields (attack detection, not harm categories) · Protected material (copyright, text/code only). Pair with Prompt Shields when injection is a concern."},
 
+{id:"sentiment",title:"Azure Language sentiment: document label rules",note:"Sentence-level scores roll up to one document label.",
+ cols:["Sentence mix in document","Document label"],
+ rows:[
+  ["At least one positive, rest neutral","<b>positive</b>"],
+  ["At least one negative, rest neutral","<b>negative</b>"],
+  ["Positive and negative sentences both present","<b>mixed</b>"],
+  ["All neutral","<b>neutral</b>"]],
+ tip:"<b>Worked question:</b> Test.docx with one positive sentence and several neutral ones → <b>positive</b>. Labels: positive, negative, neutral, mixed (per document or sentence). Opinion mining adds target-level assessments but doesn't change the document label. Test.docx is a file: read it with the Document Intelligence or Content Understanding route first, then send the text to Language."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
