@@ -371,6 +371,17 @@ const SECTIONS = [
   ["Presence Penalty","Encourages new topics","Topic variety, not label stability"]],
  tip:"<b>Worked question:</b> stable product area labels → <b>Temperature</b> (low). Explanations that fit the ticket field → <b>Max Tokens</b>. Max Tokens truncates, so pair with a prompt asking for brevity. Penalties don't stabilise classification."},
 
+{id:"multimodal",title:"Multimodal content screening (images, text, OCR text)",note:"Classify unsafe visual content before the model is invoked.",
+ cols:["Need","Feature","Notes"],
+ rows:[
+  ["Classify <b>prompt + image + text extracted from the image</b> for unsafe content before generation","<b>Moderate multimodal content</b>","Covers visible text and unsafe visuals in one call"],
+  ["Unsafe visual categories (hate, sexual, violence, self-harm) in images","Moderate multimodal content / image moderation","Severity levels per category"],
+  ["Hidden instructions or jailbreaks in text","Prompt Shields","Attack detection, not harm categories"],
+  ["Ungrounded answers","Groundedness detection","Needs context to check against"],
+  ["Copyrighted text or code","Protected material detection","Text and code only"],
+  ["Company-specific visual rules","Custom categories (rapid)","Preview; defined from examples"]],
+ tip:"<b>Worked question:</b> classify prompt, image and OCR text before an image-generation deployment → <b>Moderate multimodal content</b>. Distractors: Groundedness (answer support) · Prompt Shields (attack detection, not harm categories) · Protected material (copyright, text/code only). Pair with Prompt Shields when injection is a concern."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
