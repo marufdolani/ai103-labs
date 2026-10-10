@@ -478,6 +478,15 @@ const SECTIONS = [
   ["Azure Vision in Foundry Tools OCR","Wrong","Text from images only; no table or selection-mark recognition"]],
  tip:"<b>Worked question:</b> multi-page PDFs with tables and checkboxes, structure preserved → <b>Document Intelligence layout model</b>. Pattern: structure and tables = layout; key-value fields = general document; plain text = read."},
 
+{id:"streetsignocr",title:"Mobile app: read text from street signs",note:"Image text extraction with minimal development effort.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Azure Vision in Foundry Tools","<b>Correct</b>","Has OCR (Read) for text in images; minimal development effort"],
+  ["Azure AI Custom Vision","Wrong","Classifies or detects objects you train; has no OCR"],
+  ["Azure Face in Foundry Tools","Wrong","Detects and analyses faces; has no OCR"],
+  ["Azure Document Intelligence in Foundry Tools","Wrong","Built for documents, not photos of signs"]],
+ tip:"<b>Worked question:</b> read text from a photo of a street sign → <b>Azure Vision in Foundry Tools</b> (OCR). Pattern: text in images = Vision OCR; text in documents = Document Intelligence; custom objects = Custom Vision; faces = Face."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
