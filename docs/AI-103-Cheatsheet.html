@@ -508,6 +508,15 @@ const SECTIONS = [
   ["Routing classifier confidence score","Either","Wrong","Belongs to a routing component, not this pipeline"]],
  tip:"<b>Worked question:</b> dashboard tracks ingestion quality and relevance performance → <b>Validation failure rate over time</b> and <b>Retrieval evaluation score on a labeled query set</b>. Pattern: quality of data = validation metrics; quality of answers = labelled evaluation metrics; config and uptime are not quality signals."},
 
+{id:"tpmrealloc",title:"429 throttling on one gpt-4o deployment",note:"Use existing quota; keep the endpoint unchanged.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Reallocate TPM from Deployment2 to Deployment1","<b>Correct</b>","Moves unused capacity from the same subscription quota; no new endpoint, no code change"],
+  ["Create another gpt-4o deployment in East US","Wrong","New endpoint changes agent configuration; also needs quota that is not available"],
+  ["Request additional gpt-4o Standard quota in East US","Wrong","Quota requests take time and none is unassigned; the current quota is not the constraint"],
+  ["Increase the retry count for Deployment1","Wrong","Retries add load to a throttled deployment and do not add capacity"]],
+ tip:"<b>Worked question:</b> one deployment throttled (429), another under-used, no unassigned quota, endpoint must not change → <b>Reallocate TPM</b> between deployments. Pattern: use existing quota first; 429 = capacity problem, not a code problem; retries mask but do not fix it."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
