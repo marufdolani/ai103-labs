@@ -402,6 +402,15 @@ const SECTIONS = [
   ["Language Studio","Label utterances, train, evaluate, deploy","Authoring UI"]],
  tip:"<b>Worked question:</b> training methods for a CLU model → <b>standard and advanced only</b>. Distractor: deterministic (not a CLU option). Azure Language also offers custom question answering and custom text classification, which train differently. Verify the exact speed/cost wording on Learn."},
 
+{id:"agentcall",title:"Calling a configured agent from an app",note:"The agent uses its connected tools; the app calls the agent.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Responses API with <code>agent_reference</code> → the agent, asking it to use its Speech tool","<b>Correct</b>","The configured agent runs its MCP tools and returns the result (e.g. the audio file link)"],
+  ["Call the Speech MCP server directly from the app","Wrong","Bypasses the configured agent; the requirement says the agent handles it"],
+  ["<code>agent_reference</code> set to the MCP server name","Wrong","<code>agent_reference</code> names an agent, not a tool server"],
+  ["Responses API without the agent, asking the model for audio","Wrong","Bypasses the agent and its connected tools"]],
+ tip:"<b>Worked question:</b> an agent connected to the Speech MCP server must do text-to-speech for <code>reply_text</code> → <b>Responses API + agent_reference to Agent1</b>. Rule: when a question says 'the configured agent handles it', call the agent, not the tool or the model."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
