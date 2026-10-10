@@ -391,6 +391,17 @@ const SECTIONS = [
   ["All neutral","<b>neutral</b>"]],
  tip:"<b>Worked question:</b> Test.docx with one positive sentence and several neutral ones → <b>positive</b>. Labels: positive, negative, neutral, mixed (per document or sentence). Opinion mining adds target-level assessments but doesn't change the document label. Test.docx is a file: read it with the Document Intelligence or Content Understanding route first, then send the text to Language."},
 
+{id:"clu",title:"Conversational Language Understanding (CLU)",note:"Intents and entities from user utterances.",
+ cols:["Item","Value","Notes"],
+ rows:[
+  ["Training methods","<b>Standard</b> and <b>Advanced</b>","Both are CLU training options"],
+  ["Deterministic","Not a CLU training method","A Language Understanding (LUIS-era) method, not CLU"],
+  ["Standard training","Faster, lower cost","Default choice; supports the common cases"],
+  ["Advanced training","Uses a larger model and more compute, higher accuracy","Use when Standard underperforms"],
+  ["Evaluation","Test set; confusion matrix; per-intent precision, recall, F1","Train, evaluate, deploy, then test"],
+  ["Language Studio","Label utterances, train, evaluate, deploy","Authoring UI"]],
+ tip:"<b>Worked question:</b> training methods for a CLU model → <b>standard and advanced only</b>. Distractor: deterministic (not a CLU option). Azure Language also offers custom question answering and custom text classification, which train differently. Verify the exact speed/cost wording on Learn."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
