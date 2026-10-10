@@ -451,6 +451,15 @@ const SECTIONS = [
   ["OpenAPI authentication with a project connection","Wrong for this requirement","Auth, not the input or output contract"]],
  tip:"<b>Worked question:</b> two definitions for a tenant-specific identifier and strict JSON output → <b>C: required structured input bound to the OpenAPI argument</b> + <b>D: structured output with the JSON schema</b>. Rule: prompt instructions guide, schemas and bindings enforce."},
 
+{id:"shelfvision",title:"Image analysis: which service for shelf images",note:"Counting products and extracting structured data from images.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Azure Content Understanding in Foundry Tools","<b>Correct</b>","Analyses images and extracts structured data (e.g. product counts) with minimal dev effort"],
+  ["Custom Vision model (train your own)","Wrong","Extra training effort with no real gain for this scenario"],
+  ["Azure Vision prebuilt model","Wrong","Detects objects and bounding boxes but cannot count or return structured product data"],
+  ["Microsoft Foundry GPT model alone","Wrong","Reasons over data you supply; cannot analyse the shelf images unaided"]],
+ tip:"<b>Worked question:</b> analyse retail shelf images for placement and stock levels → <b>Azure Content Understanding in Foundry Tools</b>. Pattern: structured extraction from images = Content Understanding; bounding boxes only = Vision prebuilt; custom classes = Custom Vision."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
