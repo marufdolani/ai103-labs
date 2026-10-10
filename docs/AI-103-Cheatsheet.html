@@ -469,6 +469,15 @@ const SECTIONS = [
   ["Microsoft.Skills.Text.V3.EntityRecognitionSkill","Wrong","Recognises entities in text that is already extracted"]],
  tip:"<b>Worked question:</b> extract content from a file inside the enrichment pipeline → <b>Microsoft.Skills.Util.DocumentExtractionSkill</b>. Pattern: get the content out first (DocumentExtractionSkill), then enrich it (text skills)."},
 
+{id:"layoutmodel",title:"Document Intelligence: extract text, tables and selection marks",note:"Multi-page PDFs that must keep their structure.",
+ cols:["Option","Verdict","Why"],
+ rows:[
+  ["Azure Document Intelligence layout model","<b>Correct</b>","Extracts text, tables and selection marks while preserving document structure"],
+  ["Azure Document Intelligence general document model","Wrong","Extracts key-value pairs and entities; does not focus on structure"],
+  ["Azure Document Intelligence read model","Wrong","Extracts printed and handwritten text only; no tables or selection marks"],
+  ["Azure Vision in Foundry Tools OCR","Wrong","Text from images only; no table or selection-mark recognition"]],
+ tip:"<b>Worked question:</b> multi-page PDFs with tables and checkboxes, structure preserved → <b>Document Intelligence layout model</b>. Pattern: structure and tables = layout; key-value fields = general document; plain text = read."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
