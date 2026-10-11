@@ -640,6 +640,17 @@ const SECTIONS = [
   ["imageURL array element","Wrong","Not the element name in the response; the URLs sit under result as url"]],
  tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/dall-e' target='_blank' rel='noopener'>Azure OpenAI DALL-E REST API</a>. Pattern: the first response returns an operation-location header to poll; the finished job's result element holds the url list."},
 
+{id:"gpt4endpoint",title:"Make a GPT-4 model available through an endpoint",note:"Three steps, in order: resource, catalog model, deployment.",
+ cols:["Action","Verdict","Why"],
+ rows:[
+  ["Provision a Microsoft Foundry resource","<b>Correct</b>","Hosts the Azure OpenAI models and gives the project an endpoint"],
+  ["Select GPT-4 from the catalog","<b>Correct</b>","Chooses the model to use from the Foundry model catalog"],
+  ["Deploy a GPT-4 model","<b>Correct</b>","Creates a named deployment; the deployment name is what the endpoint serves"],
+  ["Create a new Azure subscription","Wrong","Not needed; you can use an existing subscription"],
+  ["Set up a virtual machine","Wrong","Not needed; the model is hosted by the service"],
+  ["Use DALL-E","Wrong","Image generation model; not the chat model for natural language responses"]],
+ tip:"<b>Worked question:</b> GPT-4 available for inferencing through an endpoint → <b>provision a Foundry resource</b>, <b>select GPT-4 from the catalog</b>, <b>deploy it</b>. Pattern: resource, then model, then deployment; the endpoint belongs to the deployment."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
