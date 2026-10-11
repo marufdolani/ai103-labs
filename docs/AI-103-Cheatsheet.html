@@ -651,6 +651,17 @@ const SECTIONS = [
   ["Use DALL-E","Wrong","Image generation model; not the chat model for natural language responses"]],
  tip:"<b>Worked question:</b> GPT-4 available for inferencing through an endpoint → <b>provision a Foundry resource</b>, <b>select GPT-4 from the catalog</b>, <b>deploy it</b>. Pattern: resource, then model, then deployment; the endpoint belongs to the deployment."},
 
+{id:"agentexternal",title:"Foundry Agent Service: external APIs and real-time data",note:"Tools give the agent live data; the agent is then deployed.",
+ cols:["Action","Verdict","Why"],
+ rows:[
+  ["Define tools for API access","<b>Correct</b>","Gives the agent callable tools (for example OpenAPI or function tools) to reach external APIs"],
+  ["Configure the Bing Search tool","<b>Correct</b>","Grounds responses in current web results, which provides real-time data"],
+  ["Deploy the agent using the Azure SDK","<b>Correct</b>","Creates the agent with its tools so it can be called"],
+  ["Manually parse API responses in code","Wrong","The agent handles tool calls and reads the results; hand-parsing bypasses that"],
+  ["Set up an Azure AI Search resource","Wrong","Searches indexed content you have loaded, not live external APIs"],
+  ["Use Blob Storage for conversation state","Wrong","Agent threads and runs hold conversation state; Blob Storage is not needed"]],
+ tip:"<b>Worked question:</b> agent interacts with external APIs and uses real-time data → <b>define tools for API access</b>, <b>configure Bing Search</b>, <b>deploy the agent</b>. Pattern: tools = actions and live data; index = your own stored content; threads = conversation state."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
