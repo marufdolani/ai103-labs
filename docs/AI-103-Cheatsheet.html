@@ -517,6 +517,16 @@ const SECTIONS = [
   ["Increase the retry count for Deployment1","Wrong","Retries add load to a throttled deployment and do not add capacity"]],
  tip:"<b>Worked question:</b> one deployment throttled (429), another under-used, no unassigned quota, endpoint must not change → <b>Reallocate TPM</b> between deployments. Pattern: use existing quota first; 429 = capacity problem, not a code problem; retries mask but do not fix it."},
 
+{id:"genparams2",title:"Generation parameters: consistent labels, bounded length",note:"Match each requirement to the parameter that controls it.",
+ cols:["Requirement","Parameter","Verdict","Why"],
+ rows:[
+  ["Stable product area labels","Temperature","<b>Correct</b>","Lower temperature makes sampling more deterministic, so repeated runs return the same label"],
+  ["Explanations that fit the ticket field","Max Tokens","<b>Correct</b>","Caps the number of output tokens, so explanations cannot exceed the field"],
+  ["Stable product area labels","Top P","Alternative","Also narrows sampling; tune temperature or Top P, not both"],
+  ["Explanations that fit the ticket field","Stop Sequences","Wrong","Ends output at a chosen string; it cuts off text unpredictably rather than sizing it"],
+  ["Either","Frequency or Presence Penalty","Wrong","Reduce repetition of words; do not change label consistency or length"]],
+ tip:"<b>Worked question:</b> consistent classification labels and explanations that fit a field → <b>Temperature</b> and <b>Max Tokens</b>. Pattern: randomness = temperature (or Top P); length = max tokens; penalties = repetition only."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
