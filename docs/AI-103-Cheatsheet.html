@@ -628,6 +628,15 @@ const SECTIONS = [
   ["Groundedness Pro (preview)","Response","Uses Azure AI Content Safety to return True or False on strict consistency with the context"]],
  tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/rag-evaluators' target='_blank' rel='noopener'>RAG evaluators for generative AI</a>. Pattern: retrieval evaluators judge chunks; response evaluators judge the answer; Document Retrieval is the one that needs labelled relevance judgments."},
 
+{id:"dalleurls",title:"DALL-E REST response: where the image URLs are",note:"Image generation is asynchronous; poll, then read the result.",
+ cols:["Element","Verdict","Why"],
+ rows:[
+  ["result","<b>Correct</b>","Holds the collection of url elements, each referencing a generated PNG, once generation is complete"],
+  ["images array","Wrong","Not the element returned by the DALL-E REST API for generated URLs in this flow"],
+  ["ids array","Wrong","Not a URL collection"],
+  ["imageURL array element","Wrong","Not the element name in the response; the URLs sit under result as url"]],
+ tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/dall-e' target='_blank' rel='noopener'>Azure OpenAI DALL-E REST API</a>. Pattern: the first response returns an operation-location header to poll; the finished job's result element holds the url list."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
