@@ -13,9 +13,16 @@ h1{margin:0;font-size:1.8rem}
 .sub{color:var(--muted);margin:4px 0 16px}
 .bar{position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;display:grid;gap:8px;border-bottom:1px solid var(--line)}
 input[type=search]{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
-.toc{display:flex;flex-wrap:wrap;gap:6px}
-.toc a{font-size:.8rem;padding:3px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:#fff}
-.toc a:hover{border-color:var(--accent);color:var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters input[type=search]{flex:1 1 320px}
+.secbox{position:relative}
+.secbox summary{list-style:none;cursor:pointer;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;min-width:200px}
+.secbox summary::-webkit-details-marker{display:none}
+.secpanel{position:absolute;top:calc(100% + 4px);left:0;z-index:10;width:min(460px,90vw);max-height:60vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;box-shadow:0 6px 18px rgba(19,32,48,.12)}
+.secpanel label{display:flex;gap:8px;padding:5px 6px;border-radius:4px;cursor:pointer}
+.secpanel label:hover{background:var(--head)}
+.secpanel .btns{display:flex;gap:8px;margin-bottom:6px}
+.secpanel button{font:inherit;font-size:.8rem;padding:3px 10px;border:1px solid var(--line);border-radius:4px;background:#fff;cursor:pointer}
 section{margin-top:28px}
 h2{font-size:1.2rem;margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
 h2 small{font-weight:400;font-size:.8rem;color:var(--muted)}
@@ -31,7 +38,7 @@ tr.off,section.off{display:none}
 .tip{margin:8px 0 0;padding:6px 10px;background:var(--hl);border-left:3px solid #c98a0b;border-radius:0 4px 4px 0;font-size:.86rem}
 code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;background:var(--head);padding:1px 4px;border-radius:3px}
 footer{margin-top:36px;color:var(--muted);font-size:.8rem}
-@media print{.bar{position:static}.toc{display:none}body{background:#fff}}
+@media print{.bar{position:static}.secbox{display:none}body{background:#fff}}
 </style>
 </head>
 <body>
@@ -39,8 +46,16 @@ footer{margin-top:36px;color:var(--muted);font-size:.8rem}
 <h1>AI-103 Cheatsheet</h1>
 <p class="sub">Developing AI Apps and Agents on Azure · tables for fast revision · verify names against Microsoft Learn before the exam</p>
 <div class="bar">
-  <input type="search" id="q" placeholder="Filter every table, e.g. 429, batch, PII, MCP" aria-label="Filter rows">
-  <nav class="toc" id="toc" aria-label="Sections"></nav>
+  <div class="filters">
+    <details class="secbox" id="secbox">
+      <summary>Sections: all</summary>
+      <div class="secpanel">
+        <div class="btns"><button type="button" id="selall">Select all</button><button type="button" id="selnone">Clear</button></div>
+        <div id="seclist"></div>
+      </div>
+    </details>
+    <input type="search" id="q" placeholder="Full-text search, e.g. 429, batch, PII, MCP" aria-label="Full-text search">
+  </div>
 </div>
 <main id="out"></main>
 <footer>To add content: append an object to <code>SECTIONS</code> in the script at the bottom of this file (id, title, note, cols, rows, optional tip). Print-friendly.</footer>
@@ -537,21 +552,28 @@ const SECTIONS = [
 ];
 /* ===== END SECTIONS ===== */
 
-const out=document.getElementById('out'),toc=document.getElementById('toc');
+const out=document.getElementById('out'),list=document.getElementById('seclist'),q=document.getElementById('q'),box=document.getElementById('secbox');
 const e=s=>String(s).replace(/&(?!(amp|lt|gt|quot|#\d+);)/g,'&amp;');
 out.innerHTML=SECTIONS.map(s=>`<section id="${s.id}"><h2>${s.title}${s.note?`<small>${s.note}</small>`:''}</h2>
 <div class="tw"><table><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${s.tip?`<div class="tip">${s.tip}</div>`:''}</section>`).join('');
-toc.innerHTML=SECTIONS.map(s=>`<a href="#${s.id}">${s.title}</a>`).join('');
-document.getElementById('q').addEventListener('input',ev=>{
-  const q=ev.target.value.trim().toLowerCase();
+list.innerHTML=SECTIONS.map(s=>`<label><input type="checkbox" value="${s.id}" checked><span>${s.title}</span></label>`).join('');
+function applyFilters(){
+  const term=q.value.trim().toLowerCase();
+  const chosen=new Set([...list.querySelectorAll('input:checked')].map(i=>i.value));
+  box.querySelector('summary').textContent=`Sections: ${chosen.size===SECTIONS.length?'all':chosen.size+' of '+SECTIONS.length}`;
   document.querySelectorAll('section').forEach(sec=>{
     let any=false;
     sec.querySelectorAll('tbody tr').forEach(tr=>{
-      const m=!q||tr.textContent.toLowerCase().includes(q);
-      tr.classList.toggle('off',!m);tr.classList.toggle('hit',!!q&&m);if(m)any=true;});
-    sec.classList.toggle('off',!any);
+      const m=!term||tr.textContent.toLowerCase().includes(term);
+      tr.classList.toggle('off',!m);tr.classList.toggle('hit',!!term&&m);if(m)any=true;});
+    sec.classList.toggle('off',!chosen.has(sec.id)||!any);
   });
-});
+}
+list.addEventListener('change',applyFilters);
+q.addEventListener('input',applyFilters);
+document.getElementById('selall').addEventListener('click',()=>{list.querySelectorAll('input').forEach(i=>i.checked=true);applyFilters();});
+document.getElementById('selnone').addEventListener('click',()=>{list.querySelectorAll('input').forEach(i=>i.checked=false);applyFilters();});
+applyFilters();
 </script>
 </body>
 </html>
