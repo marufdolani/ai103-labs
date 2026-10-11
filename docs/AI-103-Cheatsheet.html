@@ -21,6 +21,8 @@ input[type=search]{width:100%;padding:9px 12px;border:1px solid var(--line);bord
 .secpanel{position:absolute;top:calc(100% + 4px);left:0;z-index:10;width:min(460px,90vw);max-height:60vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;box-shadow:0 6px 18px rgba(19,32,48,.12)}
 .secpanel label{display:flex;gap:8px;padding:5px 6px;border-radius:4px;cursor:pointer}
 .secpanel label:hover{background:var(--head)}
+.secpanel label[hidden]{display:none}
+.secpanel .secfind{width:100%;padding:6px 8px;margin-bottom:6px;border:1px solid var(--line);border-radius:4px;font:inherit;background:#fff}
 .secpanel .btns{display:flex;gap:8px;margin-bottom:6px}
 .secpanel button{font:inherit;font-size:.8rem;padding:3px 10px;border:1px solid var(--line);border-radius:4px;background:#fff;cursor:pointer}
 section{margin-top:28px}
@@ -50,7 +52,8 @@ footer{margin-top:36px;color:var(--muted);font-size:.8rem}
     <details class="secbox" id="secbox">
       <summary>Sections: all</summary>
       <div class="secpanel">
-        <div class="btns"><button type="button" id="selall">Select all</button><button type="button" id="selnone">Clear</button></div>
+        <input type="search" id="secfind" class="secfind" placeholder="Type to find a section" aria-label="Find a section">
+        <div class="btns"><button type="button" id="selall">Select all shown</button><button type="button" id="selnone">Clear shown</button></div>
         <div id="seclist"></div>
       </div>
     </details>
@@ -666,8 +669,14 @@ function applyFilters(){
 }
 list.addEventListener('change',applyFilters);
 q.addEventListener('input',applyFilters);
-document.getElementById('selall').addEventListener('click',()=>{list.querySelectorAll('input').forEach(i=>i.checked=true);applyFilters();});
-document.getElementById('selnone').addEventListener('click',()=>{list.querySelectorAll('input').forEach(i=>i.checked=false);applyFilters();});
+const secfind=document.getElementById('secfind');
+secfind.addEventListener('input',()=>{
+  const t=secfind.value.trim().toLowerCase();
+  list.querySelectorAll('label').forEach(l=>{l.hidden=!!t&&!l.textContent.toLowerCase().includes(t);});
+});
+const shownBoxes=()=>list.querySelectorAll('label:not([hidden]) input');
+document.getElementById('selall').addEventListener('click',()=>{shownBoxes().forEach(i=>i.checked=true);applyFilters();});
+document.getElementById('selnone').addEventListener('click',()=>{shownBoxes().forEach(i=>i.checked=false);applyFilters();});
 applyFilters();
 </script>
 </body>
