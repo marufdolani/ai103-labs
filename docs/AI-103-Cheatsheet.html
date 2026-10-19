@@ -724,6 +724,17 @@ const SECTIONS = [
   ["Where to check dates","Expiration column on the Deploy models page; or the transcriptionDateTime property via the API or Speech CLI"]],
  tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-custom-speech-model-and-endpoint-lifecycle' target='_blank' rel='noopener'>Model lifecycle of custom speech</a>. Pattern: expiry breaks batch jobs with 4xx but a custom endpoint falls back to the base model; the fix is to repoint the model. Learn does not say whether an expired model can still be trained or copied."},
 
+{id:"searchkeyleak",title:"Azure AI Search: a compromised query key",note:"Learn has no dedicated query-key procedure; the order below is the safe pattern built from its key guidance.",
+ cols:["Step","Action","Basis"],
+ rows:[
+  ["1. Create a replacement query key","Manage query keys in Settings > Keys, then create a new key (up to 50 query keys per service)","Learn: query keys can be created by a service administrator"],
+  ["2. Move applications to the new key","Update every client to use the new query key before removing the old one","Inferred from Learn's zero-downtime rotation order for admin keys"],
+  ["3. Delete the compromised query key","Remove the leaked key so it stops working","Query keys are read-only; the compromised key is removed, not regenerated"],
+  ["Do not","Regenerate both admin keys at once","Both keys regenerated together means client requests fail with HTTP 403 until new keys are supplied"],
+  ["Longer term","Switch to Microsoft Entra ID and RBAC: Search Index Data Reader in place of a query key","Learn: for production workloads, switch to Entra ID and role-based access"],
+  ["Store keys safely","Keep keys in Azure Key Vault, never in code","Learn: store API keys securely, such as in Key Vault"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/search/search-security-api-keys' target='_blank' rel='noopener'>Connect using API keys</a>, <a href='https://learn.microsoft.com/en-us/azure/search/search-security-best-practices' target='_blank' rel='noopener'>Best practices for security</a>. Pattern: create new, move clients, delete old; never regenerate both admin keys at once. Admin key rotation uses primary and secondary; query keys use create and delete."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
