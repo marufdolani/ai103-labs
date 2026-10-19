@@ -747,6 +747,17 @@ const SECTIONS = [
   ["Resource logs","Diagnostic setting categories: Audit, RequestResponse, Trace, AzureOpenAIRequestUsage (costs to export), ManagedNetworkEvent; all land in AzureDiagnostics","Logs are not stored until a diagnostic setting routes them; category descriptions were not confirmed on Learn"]],
  tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/openai/monitor-openai-reference' target='_blank' rel='noopener'>Monitoring data reference for Azure OpenAI</a>, <a href='https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/diagnostic-settings' target='_blank' rel='noopener'>Diagnostic settings in Azure Monitor</a>. Pattern: 429 = count by StatusCode, then PTU utilization if PTU, then tokens against TPM. Verify category descriptions for Trace and RequestResponse in the reference before the exam."},
 
+{id:"piiaudit",title:"Customer PII in audit logs: email, phone and SSN",note:"What Learn confirms about logs and PII detection. Log field contents were not documented.",
+ cols:["Question","Answer","Basis"],
+ rows:[
+  ["Does Learn say audit logs contain customer email, phone or SSN?","<b>Not stated</b>","Audit, RequestResponse and Trace are listed as categories; their fields and whether they hold prompts or personal data are not documented"],
+  ["Are prompt tokens counted in metrics?","Yes, as counts only","Processed Prompt Tokens is a token count, not log content"],
+  ["Email","Detected by PII detection (Personal category, value Email)","Learn: specify Email in piiCategories"],
+  ["Phone number","Detected by PII detection (Personal category, value PhoneNumber)","Learn: specify PhoneNumber in piiCategories"],
+  ["US Social Security Number","Not confirmed; check the full entity category list","Learn's visible entity list did not show it in the part retrieved"],
+  ["Protecting PII in stored data","Run PII detection and redaction before storing or logging text","Learn: the service identifies, classifies and redacts sensitive data and returns redacted results"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/openai/monitor-openai-reference' target='_blank' rel='noopener'>Monitoring data reference for Azure OpenAI</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/overview' target='_blank' rel='noopener'>PII detection overview</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/concepts/entity-categories' target='_blank' rel='noopener'>PII entity categories</a>. Pattern: audit logs record operations, so do not rely on them for personal data; redact PII before it reaches logs or storage. Verify the exact SSN category name in the full entity list."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
