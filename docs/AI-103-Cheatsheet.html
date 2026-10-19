@@ -758,6 +758,17 @@ const SECTIONS = [
   ["Protecting PII in stored data","Run PII detection and redaction before storing or logging text","Learn: the service identifies, classifies and redacts sensitive data and returns redacted results"]],
  tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/openai/monitor-openai-reference' target='_blank' rel='noopener'>Monitoring data reference for Azure OpenAI</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/overview' target='_blank' rel='noopener'>PII detection overview</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/concepts/entity-categories' target='_blank' rel='noopener'>PII entity categories</a>. Pattern: audit logs record operations, so do not rely on them for personal data; redact PII before it reaches logs or storage. Verify the exact SSN category name in the full entity list."},
 
+{id:"agenttools",title:"Foundry agent tools: public web, calculations, files, computer use",note:"Match the requirement to the tool, per Microsoft Learn.",
+ cols:["Requirement","Tool","Why"],
+ rows:[
+  ["Search public websites for current information","<b>Web search</b> (Grounding with Bing Search)","Retrieves real-time public web results with inline citations"],
+  ["Perform calculations and analyse data","<b>Code interpreter</b>","Runs generated code in a sandbox to analyse data and produce files"],
+  ["Answer from uploaded documents","File search","Grounds answers in uploaded files through managed vector stores"],
+  ["Use internal indexed content","Azure AI Search integration","Uses Azure AI Search indexes as agent knowledge"],
+  ["Operate a virtual desktop or UI","Computer use (preview)","Lets an agent operate a virtual computer interface; not needed for search or maths"],
+  ["Call your own REST API or functions","OpenAPI tool or function calling","Structured calls to your endpoints or code"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/concepts/capability-reference' target='_blank' rel='noopener'>Foundry capability reference</a>, <a href='https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/web-search' target='_blank' rel='noopener'>Web search tool</a>. <b>Worked question:</b> public websites plus calculations → <b>web search</b> and <b>code interpreter</b>. Pattern: public web = web search (Bing-backed, data outside the Data Protection Addendum, untrusted output); maths = code interpreter; uploaded files = file search."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
