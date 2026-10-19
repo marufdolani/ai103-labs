@@ -662,6 +662,17 @@ const SECTIONS = [
   ["Use Blob Storage for conversation state","Wrong","Agent threads and runs hold conversation state; Blob Storage is not needed"]],
  tip:"<b>Worked question:</b> agent interacts with external APIs and uses real-time data → <b>define tools for API access</b>, <b>configure Bing Search</b>, <b>deploy the agent</b>. Pattern: tools = actions and live data; index = your own stored content; threads = conversation state."},
 
+{id:"armaccount",title:"Create a Cognitive Services account and get its keys (ARM REST and CLI)",note:"Create = PUT; keys = POST listKeys. Per Microsoft Learn.",
+ cols:["Question","Answer","Why"],
+ rows:[
+  ["HTTP method to create the account","<b>PUT</b>","ARM creates or updates a resource at its URL: PUT .../providers/Microsoft.CognitiveServices/accounts/{accountName}"],
+  ["Method to get the keys","<b>POST</b>","Keys are an action: POST .../accounts/{accountName}/listKeys returns key1 and key2"],
+  ["Kind of resource","<b>CognitiveServices</b> (multi-service) or a specific kind such as TextAnalytics or Face","Learn's minimal example uses kind CognitiveServices; list valid kinds with az cognitiveservices account list-kinds"],
+  ["Required body fields","location, kind, sku (name, for example S0), properties, identity","The body shape in the Learn example"],
+  ["Identity type","<b>SystemAssigned</b> (also None, UserAssigned, or SystemAssigned, UserAssigned)","Learn's example sets identity.type to SystemAssigned"],
+  ["CLI equivalent","az cognitiveservices account create --kind --location --name --resource-group --sku --assign-identity --yes","--assign-identity generates a system identity (default False)"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/rest/api/aiservices/accountmanagement/accounts/create?view=rest-aiservices-accountmanagement-2024-10-01' target='_blank' rel='noopener'>Accounts - Create (REST)</a>, <a href='https://learn.microsoft.com/en-us/rest/api/cognitiveservices/accountmanagement/accounts/list-keys' target='_blank' rel='noopener'>Accounts - List Keys (REST)</a>, <a href='https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest' target='_blank' rel='noopener'>az cognitiveservices account</a>. Pattern: create = PUT, read keys = POST listKeys, identity = SystemAssigned unless the question names UserAssigned. Check the exact kind against the question's option list."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
