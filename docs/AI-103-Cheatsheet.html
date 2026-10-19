@@ -673,6 +673,44 @@ const SECTIONS = [
   ["CLI equivalent","az cognitiveservices account create --kind --location --name --resource-group --sku --assign-identity --yes","--assign-identity generates a system identity (default False)"]],
  tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/rest/api/aiservices/accountmanagement/accounts/create?view=rest-aiservices-accountmanagement-2024-10-01' target='_blank' rel='noopener'>Accounts - Create (REST)</a>, <a href='https://learn.microsoft.com/en-us/rest/api/cognitiveservices/accountmanagement/accounts/list-keys' target='_blank' rel='noopener'>Accounts - List Keys (REST)</a>, <a href='https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account?view=azure-cli-latest' target='_blank' rel='noopener'>az cognitiveservices account</a>. Pattern: create = PUT, read keys = POST listKeys, identity = SystemAssigned unless the question names UserAssigned. Check the exact kind against the question's option list."},
 
+{id:"contentseverity",title:"Content Safety: harm categories, severity and blocking levels",note:"Per Microsoft Learn.",
+ cols:["Item","What Learn says"],
+ rows:[
+  ["Text harm categories","Hate and Fairness, Sexual, Violence, Self-Harm"],
+  ["Text severity scale","Full 0 to 7 scale; the optional 0, 2, 4, 6 output merges adjacent pairs (0,1 to 0; 2,3 to 2; and so on)"],
+  ["Image severity scale","0, 2, 4, 6 is the only output scale for images"],
+  ["Guardrail severity labels","Safe, Low, Medium, High"],
+  ["Blocking level","Off (blocks nothing), Low (blocks high only), Medium (blocks medium and high), High (blocks low, medium and high)"],
+  ["Safe content","Always annotated, never blocked, whatever the blocking level"],
+  ["Changing the blocking level","Does not change classification; it changes which classified severities are blocked"],
+  ["Limits","Classifiers can give false positives and false negatives; a Safe result does not prove there are no other risks"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories' target='_blank' rel='noopener'>Harm categories in Azure AI Content Safety</a>, <a href='https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/content-filter-severity-levels' target='_blank' rel='noopener'>Harm categories and severity levels in Foundry</a>. Pattern: the blocking level is a threshold on classified severity; raising it blocks more, and Safe is never blocked."},
+
+{id:"evaluators",title:"Foundry evaluators: quality, safety, RAG and agents",note:"Which evaluator measures what, per Microsoft Learn.",
+ cols:["Group","Evaluators","Ground truth needed?"],
+ rows:[
+  ["General quality","Coherence, Fluency","Not stated on the page"],
+  ["RAG and retrieval","Retrieval, Relevance, Groundedness, Groundedness Pro (preview)","Not stated for most; Groundedness Pro is pass or fail with no model deployment"],
+  ["RAG with labels","Document Retrieval, Response Completeness (preview)","Yes: Document Retrieval needs ground truth; Response Completeness compares to ground truth"],
+  ["Similarity and overlap","F1, BLEU, GLEU, ROUGE, METEOR","Yes: they compare the response to ground truth"],
+  ["Risk and safety","Hate and Unfairness, Sexual, Violence, Self-Harm, Protected Materials, Indirect Attack (XPIA)","Not stated; XPIA needs retrieved context"],
+  ["Agents","Task Adherence, Task Completion, Intent Resolution, Tool Call Accuracy, Tool Selection, Tool Input Accuracy, Tool Output Utilization, Tool Call Success (all preview or listed)","Mostly not stated; Customer Satisfaction works at conversation level in messages format"],
+  ["Agent batched judges","Output Quality, Tool Use Quality, Quality Grader (preview)","Not stated"]],
+ tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/foundry/concepts/built-in-evaluators' target='_blank' rel='noopener'>Built-in evaluators reference</a>. Pattern: quality and safety evaluators judge the response; retrieval evaluators judge the chunks; only the labelled ones (Document Retrieval, Response Completeness, similarity) need ground truth."},
+
+{id:"cluterms",title:"Conversational language understanding: intents, utterances, entities, deployment",note:"CLU replaces LUIS. Per Microsoft Learn.",
+ cols:["Term","What Learn says"],
+ rows:[
+  ["Project","A work area for building custom models; accessible to you and anyone with access to the resource"],
+  ["Intent","A task or goal the user wants, for example booking a flight"],
+  ["Utterance","A short user input used as training data; the model predicts on new utterances at runtime"],
+  ["Entity","Words in an utterance that give information needed to fulfil or identify an intent; can be broken into subentities"],
+  ["List entity","A fixed, closed set of words with synonyms; exact match"],
+  ["Regex entity","A regular expression; exact match"],
+  ["Training data","Labelled data used to train the model"],
+  ["Deployment","Assigns the trained model to a deployment so the prediction API can use it"]],
+ tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/glossary' target='_blank' rel='noopener'>CLU glossary</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview' target='_blank' rel='noopener'>CLU overview</a>. Pattern: utterances train intents; entities extract details; deployment makes the model callable. Learn did not define standard versus advanced training on the glossary page, so check that topic separately."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
