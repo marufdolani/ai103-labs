@@ -711,6 +711,19 @@ const SECTIONS = [
   ["Deployment","Assigns the trained model to a deployment so the prediction API can use it"]],
  tip:"<b>Learn sources:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/glossary' target='_blank' rel='noopener'>CLU glossary</a>, <a href='https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview' target='_blank' rel='noopener'>CLU overview</a>. Pattern: utterances train intents; entities extract details; deployment makes the model callable. Learn did not define standard versus advanced training on the glossary page, so check that topic separately."},
 
+{id:"speechexpiry",title:"Custom speech model expiry: what happens after",note:"Per Microsoft Learn model lifecycle.",
+ cols:["Scenario","What happens"],
+ rows:[
+  ["Transcription with an expired custom or base model","The model is no longer available for transcription"],
+  ["Custom endpoint using an expired model","Requests fall back to the most recent base model for the same locale; results work but may be less accurate for your domain"],
+  ["Batch transcription with an expired model","Requests fail with a 4xx error; fix by setting the model property to a non-expired model, or omit it for the latest base model"],
+  ["Endpoints on F0 (free) resources","Deleted after seven days"],
+  ["Fix for a custom endpoint","Switch the endpoint to a non-expired model with no downtime"],
+  ["Training window (base model)","One year after the quarter the base model was created"],
+  ["Transcription window","Two years after the quarter the base or custom model was created"],
+  ["Where to check dates","Expiration column on the Deploy models page; or the transcriptionDateTime property via the API or Speech CLI"]],
+ tip:"<b>Learn source:</b> <a href='https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-custom-speech-model-and-endpoint-lifecycle' target='_blank' rel='noopener'>Model lifecycle of custom speech</a>. Pattern: expiry breaks batch jobs with 4xx but a custom endpoint falls back to the base model; the fix is to repoint the model. Learn does not say whether an expired model can still be trained or copied."},
+
 {id:"renamed",title:"Renamed and retired",note:"Answer with the current name.",
  cols:["Old","Current"],
  rows:[
